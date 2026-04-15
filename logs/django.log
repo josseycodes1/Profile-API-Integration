@@ -1,0 +1,599 @@
+INFO 2026-04-15 14:20:52,520 autoreload 7740 7060 Watching for file changes with StatReloader
+WARNING 2026-04-15 14:21:10,107 log 7740 2208 Not Found: /
+WARNING 2026-04-15 14:21:10,159 basehttp 7740 2208 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:10,736 log 7740 8728 Not Found: /favicon.ico
+WARNING 2026-04-15 14:21:10,743 basehttp 7740 8728 "GET /favicon.ico HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:36,203 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:36,204 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:37,384 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:37,385 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:37,909 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:37,913 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:37,998 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:38,000 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:38,311 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:38,317 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:38,383 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:38,384 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:38,696 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:38,697 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:38,777 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:38,778 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:39,066 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:39,067 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:39,144 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:39,146 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:39,353 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:39,354 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:39,742 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:39,743 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:40,063 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:40,064 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:40,425 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:40,426 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:41,219 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:41,258 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:41,732 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:41,733 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:42,055 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:42,057 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:42,475 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:42,476 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:42,846 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:42,848 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:46,445 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:46,446 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:46,869 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:46,871 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:46,953 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:46,955 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:47,216 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:47,217 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:47,559 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:47,561 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:47,906 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:47,907 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:48,317 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:48,318 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:48,690 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:48,692 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:49,083 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:49,084 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:49,409 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:49,412 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:49,748 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:49,750 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:49,847 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:49,856 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:21:50,112 log 7740 8724 Not Found: /
+WARNING 2026-04-15 14:21:50,113 basehttp 7740 8724 "GET / HTTP/1.1" 404 179
+WARNING 2026-04-15 14:22:55,910 log 7740 8724 Not Found: /profiles
+WARNING 2026-04-15 14:22:55,911 basehttp 7740 8724 "GET /profiles HTTP/1.1" 404 179
+WARNING 2026-04-15 14:22:59,143 log 7740 8724 Not Found: /profiles
+WARNING 2026-04-15 14:22:59,144 basehttp 7740 8724 "GET /profiles HTTP/1.1" 404 179
+WARNING 2026-04-15 14:22:59,948 log 7740 8724 Not Found: /profiles
+WARNING 2026-04-15 14:22:59,955 basehttp 7740 8724 "GET /profiles HTTP/1.1" 404 179
+WARNING 2026-04-15 14:23:00,331 log 7740 8724 Not Found: /profiles
+WARNING 2026-04-15 14:23:00,332 basehttp 7740 8724 "GET /profiles HTTP/1.1" 404 179
+WARNING 2026-04-15 14:23:00,764 log 7740 8724 Not Found: /profiles
+WARNING 2026-04-15 14:23:00,765 basehttp 7740 8724 "GET /profiles HTTP/1.1" 404 179
+WARNING 2026-04-15 14:23:01,192 log 7740 8724 Not Found: /profiles
+WARNING 2026-04-15 14:23:01,193 basehttp 7740 8724 "GET /profiles HTTP/1.1" 404 179
+ERROR 2026-04-15 14:23:24,756 log 7740 8724 Internal Server Error: /api/profiles
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\response.py", line 74, in rendered_content
+    ret = renderer.render(self.data, accepted_media_type, context)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\renderers.py", line 726, in render
+    template = loader.get_template(self.template)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: rest_framework/api.html
+ERROR 2026-04-15 14:23:24,768 basehttp 7740 8724 "GET /api/profiles HTTP/1.1" 500 145
+INFO 2026-04-15 14:27:39,845 autoreload 7740 7060 C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py changed, reloading.
+INFO 2026-04-15 14:27:41,596 autoreload 13724 13784 Watching for file changes with StatReloader
+INFO 2026-04-15 14:28:39,234 autoreload 13724 13784 C:\Users\USER\Desktop\Profile-Integration\config\settings.py changed, reloading.
+INFO 2026-04-15 14:28:41,200 autoreload 11496 14404 Watching for file changes with StatReloader
+INFO 2026-04-15 14:29:12,955 autoreload 15116 7332 Watching for file changes with StatReloader
+WARNING 2026-04-15 14:29:22,222 log 15116 11612 Method Not Allowed: /api/profiles
+WARNING 2026-04-15 14:29:22,223 basehttp 15116 11612 "GET /api/profiles HTTP/1.1" 405 5641
+INFO 2026-04-15 14:29:22,612 basehttp 15116 11576 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2026-04-15 14:29:22,645 basehttp 15116 13364 "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2026-04-15 14:29:22,654 basehttp 15116 15076 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2026-04-15 14:29:22,694 basehttp 15116 11576 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2026-04-15 14:29:22,770 basehttp 15116 10008 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2026-04-15 14:29:22,810 basehttp 15116 11612 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2026-04-15 14:29:22,926 basehttp 15116 11576 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2026-04-15 14:29:22,937 basehttp 15116 13364 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2026-04-15 14:29:22,942 basehttp 15116 15076 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2026-04-15 14:29:22,985 basehttp 15116 11612 "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO 2026-04-15 14:29:23,011 basehttp 15116 7968 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2026-04-15 14:29:23,019 basehttp 15116 10008 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+WARNING 2026-04-15 14:29:27,947 log 15116 10008 Method Not Allowed: /api/profiles
+WARNING 2026-04-15 14:29:27,949 basehttp 15116 10008 "GET /api/profiles HTTP/1.1" 405 5641
+WARNING 2026-04-15 14:30:31,318 log 15116 15020 Method Not Allowed: /api/profiles
+WARNING 2026-04-15 14:30:31,319 basehttp 15116 15020 "GET /api/profiles HTTP/1.1" 405 40
+INFO 2026-04-15 14:39:28,189 autoreload 15116 7332 C:\Users\USER\Desktop\Profile-Integration\config\settings.py changed, reloading.
+INFO 2026-04-15 14:39:30,707 autoreload 5500 14408 Watching for file changes with StatReloader
+INFO 2026-04-15 14:40:04,747 autoreload 5500 14408 C:\Users\USER\Desktop\Profile-Integration\config\urls.py changed, reloading.
+INFO 2026-04-15 14:40:06,664 autoreload 2608 11812 Watching for file changes with StatReloader
+INFO 2026-04-15 14:40:35,109 autoreload 2608 11812 C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py changed, reloading.
+INFO 2026-04-15 14:40:36,971 autoreload 14816 12788 Watching for file changes with StatReloader
+INFO 2026-04-15 14:41:29,275 basehttp 14816 9812 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 14:41:29,588 basehttp 14816 11356 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui.css HTTP/1.1" 200 145206
+INFO 2026-04-15 14:41:29,601 basehttp 14816 9812 "GET /static/drf-yasg/style.css HTTP/1.1" 200 1047
+INFO 2026-04-15 14:41:29,699 basehttp 14816 9812 "GET /static/drf-yasg/insQ.min.js HTTP/1.1" 200 2093
+INFO 2026-04-15 14:41:29,824 basehttp 14816 6972 "GET /static/drf-yasg/swagger-ui-init.js HTTP/1.1" 200 15480
+INFO 2026-04-15 14:41:29,872 basehttp 14816 4316 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js HTTP/1.1" 200 1046583
+INFO 2026-04-15 14:41:30,008 basehttp 14816 11356 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js HTTP/1.1" 200 322863
+INFO 2026-04-15 14:41:30,072 basehttp 14816 2212 "GET /static/drf-yasg/immutable.min.js HTTP/1.1" 200 56904
+INFO 2026-04-15 14:41:30,582 basehttp 14816 2212 "GET /api/docs/?format=openapi HTTP/1.1" 200 4389
+INFO 2026-04-15 14:41:30,753 basehttp 14816 2212 "GET /static/drf-yasg/swagger-ui-dist/favicon-32x32.png HTTP/1.1" 200 628
+ERROR 2026-04-15 14:41:51,242 views 14816 11188 Unexpected error in create profile: JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\parsers.py", line 66, in parse
+    return json.load(decoded_stream, parse_constant=parse_constant)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\utils\json.py", line 31, in load
+    return json.load(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 365, in loads
+    return cls(**kw).decode(s)
+           ~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 361, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ~~~~~~~~~~~~~~^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py", line 74, in post
+    name = request.data.get('name', '').strip().lower()
+           ^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 220, in data
+    self._load_data_and_files()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 283, in _load_data_and_files
+    self._data, self._files = self._parse()
+                              ~~~~~~~~~~~^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 358, in _parse
+    parsed = parser.parse(stream, media_type, self.parser_context)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\parsers.py", line 68, in parse
+    raise ParseError('JSON parse error - %s' % str(exc))
+rest_framework.exceptions.ParseError: JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+ERROR 2026-04-15 14:41:51,306 log 14816 11188 Internal Server Error: /api/profiles
+ERROR 2026-04-15 14:41:51,307 basehttp 14816 11188 "POST /api/profiles HTTP/1.1" 500 52
+ERROR 2026-04-15 14:42:20,598 views 14816 6520 Unexpected error in create profile: JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\parsers.py", line 66, in parse
+    return json.load(decoded_stream, parse_constant=parse_constant)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\utils\json.py", line 31, in load
+    return json.load(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 365, in loads
+    return cls(**kw).decode(s)
+           ~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 361, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ~~~~~~~~~~~~~~^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py", line 74, in post
+    name = request.data.get('name', '').strip().lower()
+           ^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 220, in data
+    self._load_data_and_files()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 283, in _load_data_and_files
+    self._data, self._files = self._parse()
+                              ~~~~~~~~~~~^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 358, in _parse
+    parsed = parser.parse(stream, media_type, self.parser_context)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\parsers.py", line 68, in parse
+    raise ParseError('JSON parse error - %s' % str(exc))
+rest_framework.exceptions.ParseError: JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+ERROR 2026-04-15 14:42:20,608 log 14816 6520 Internal Server Error: /api/profiles
+ERROR 2026-04-15 14:42:20,610 basehttp 14816 6520 "POST /api/profiles HTTP/1.1" 500 52
+WARNING 2026-04-15 14:42:31,070 log 14816 10596 Method Not Allowed: /api/profiles
+WARNING 2026-04-15 14:42:31,072 basehttp 14816 10596 "GET /api/profiles HTTP/1.1" 405 40
+ERROR 2026-04-15 14:44:04,446 views 14816 9784 Unexpected error in create profile: JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\parsers.py", line 66, in parse
+    return json.load(decoded_stream, parse_constant=parse_constant)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\utils\json.py", line 31, in load
+    return json.load(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 365, in loads
+    return cls(**kw).decode(s)
+           ~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 361, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ~~~~~~~~~~~~~~^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py", line 74, in post
+    name = request.data.get('name', '').strip().lower()
+           ^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 220, in data
+    self._load_data_and_files()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 283, in _load_data_and_files
+    self._data, self._files = self._parse()
+                              ~~~~~~~~~~~^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 358, in _parse
+    parsed = parser.parse(stream, media_type, self.parser_context)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\parsers.py", line 68, in parse
+    raise ParseError('JSON parse error - %s' % str(exc))
+rest_framework.exceptions.ParseError: JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+ERROR 2026-04-15 14:44:04,450 log 14816 9784 Internal Server Error: /api/profiles
+ERROR 2026-04-15 14:44:04,451 basehttp 14816 9784 "POST /api/profiles HTTP/1.1" 500 52
+ERROR 2026-04-15 14:44:15,147 views 14816 7556 Unexpected error in create profile: JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\parsers.py", line 66, in parse
+    return json.load(decoded_stream, parse_constant=parse_constant)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\utils\json.py", line 31, in load
+    return json.load(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 365, in loads
+    return cls(**kw).decode(s)
+           ~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 361, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ~~~~~~~~~~~~~~^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py", line 74, in post
+    name = request.data.get('name', '').strip().lower()
+           ^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 220, in data
+    self._load_data_and_files()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 283, in _load_data_and_files
+    self._data, self._files = self._parse()
+                              ~~~~~~~~~~~^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\request.py", line 358, in _parse
+    parsed = parser.parse(stream, media_type, self.parser_context)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\parsers.py", line 68, in parse
+    raise ParseError('JSON parse error - %s' % str(exc))
+rest_framework.exceptions.ParseError: JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+ERROR 2026-04-15 14:44:15,158 log 14816 7556 Internal Server Error: /api/profiles
+ERROR 2026-04-15 14:44:15,160 basehttp 14816 7556 "POST /api/profiles HTTP/1.1" 500 52
+INFO 2026-04-15 14:44:31,842 services 14816 14704 Starting external API calls for name: ella
+INFO 2026-04-15 14:44:31,845 services 14816 14704 Fetching gender data for name: ella
+INFO 2026-04-15 14:44:33,107 services 14816 14704 Successfully fetched gender data for ella
+INFO 2026-04-15 14:44:33,108 services 14816 14704 Fetching age data for name: ella
+INFO 2026-04-15 14:44:34,284 services 14816 14704 Successfully fetched age data for ella: age=53, group=adult
+INFO 2026-04-15 14:44:34,286 services 14816 14704 Fetching nationality data for name: ella
+INFO 2026-04-15 14:44:35,638 services 14816 14704 Successfully fetched nationality data for ella: country=CM
+INFO 2026-04-15 14:44:35,640 services 14816 14704 Successfully fetched all data for ella: {'gender': 'female', 'gender_probability': 0.99, 'sample_size': 97517, 'age': 53, 'age_group': 'adult', 'country_id': 'CM', 'country_probability': 0.09677289106552395}
+INFO 2026-04-15 14:44:35,898 views 14816 14704 Successfully created profile for ella with ID: 019d9162-f839-45d9-ac1b-510823679de3
+INFO 2026-04-15 14:44:35,901 basehttp 14816 14704 "POST /api/profiles HTTP/1.1" 201 283
+INFO 2026-04-15 14:48:52,926 autoreload 14816 12788 C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\urls.py changed, reloading.
+INFO 2026-04-15 14:48:55,241 autoreload 4736 4744 Watching for file changes with StatReloader
+INFO 2026-04-15 14:49:29,778 autoreload 4736 4744 C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\urls.py changed, reloading.
+INFO 2026-04-15 14:49:32,109 autoreload 3216 15176 Watching for file changes with StatReloader
+INFO 2026-04-15 14:50:16,123 basehttp 3216 13104 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 14:50:16,158 basehttp 3216 13104 "GET /static/drf-yasg/style.css HTTP/1.1" 304 0
+INFO 2026-04-15 14:50:16,167 basehttp 3216 13104 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui.css HTTP/1.1" 304 0
+INFO 2026-04-15 14:50:16,168 basehttp 3216 15260 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:50:16,176 basehttp 3216 15260 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:50:16,176 basehttp 3216 13104 "GET /static/drf-yasg/insQ.min.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:50:16,182 basehttp 3216 15260 "GET /static/drf-yasg/immutable.min.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:50:16,188 basehttp 3216 13104 "GET /static/drf-yasg/swagger-ui-init.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:50:16,465 basehttp 3216 13104 "GET /api/docs/?format=openapi HTTP/1.1" 200 2716
+INFO 2026-04-15 14:50:16,478 basehttp 3216 13104 "GET /static/drf-yasg/swagger-ui-dist/favicon-32x32.png HTTP/1.1" 304 0
+INFO 2026-04-15 14:54:20,204 autoreload 3216 15176 C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py changed, reloading.
+INFO 2026-04-15 14:54:21,632 autoreload 11612 11952 Watching for file changes with StatReloader
+INFO 2026-04-15 14:54:33,905 basehttp 11612 11812 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 14:54:34,071 basehttp 11612 11812 "GET /api/docs/?format=openapi HTTP/1.1" 200 2062
+INFO 2026-04-15 14:54:41,042 basehttp 11612 11812 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 14:54:41,180 basehttp 11612 11812 "GET /api/docs/?format=openapi HTTP/1.1" 200 2062
+INFO 2026-04-15 14:54:56,116 autoreload 8200 5680 Watching for file changes with StatReloader
+INFO 2026-04-15 14:55:02,362 basehttp 8200 11884 "GET /api/profiles HTTP/1.1" 301 0
+WARNING 2026-04-15 14:55:02,417 log 8200 11084 Method Not Allowed: /api/profiles/
+WARNING 2026-04-15 14:55:02,418 basehttp 8200 11084 "GET /api/profiles/ HTTP/1.1" 405 5617
+INFO 2026-04-15 14:55:02,457 basehttp 8200 11084 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 304 0
+INFO 2026-04-15 14:55:02,464 basehttp 8200 11084 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:55:02,475 basehttp 8200 6288 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 304 0
+INFO 2026-04-15 14:55:02,478 basehttp 8200 11084 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:55:02,473 basehttp 8200 5732 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 304 0
+INFO 2026-04-15 14:55:02,490 basehttp 8200 11084 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:55:02,498 basehttp 8200 6544 "GET /static/rest_framework/css/default.css HTTP/1.1" 304 0
+INFO 2026-04-15 14:55:02,499 basehttp 8200 6288 "GET /static/rest_framework/js/default.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:55:02,515 basehttp 8200 3976 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:55:02,516 basehttp 8200 5336 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:55:02,524 basehttp 8200 5732 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 304 0
+WARNING 2026-04-15 14:55:04,190 log 8200 5732 Method Not Allowed: /api/profiles/
+WARNING 2026-04-15 14:55:04,191 basehttp 8200 5732 "GET /api/profiles/ HTTP/1.1" 405 5617
+INFO 2026-04-15 14:55:11,264 basehttp 8200 5732 "GET /api/docs HTTP/1.1" 301 0
+INFO 2026-04-15 14:55:11,304 basehttp 8200 5336 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 14:55:11,766 basehttp 8200 5336 "GET /static/drf-yasg/style.css HTTP/1.1" 200 1047
+INFO 2026-04-15 14:55:11,773 basehttp 8200 3976 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui.css HTTP/1.1" 200 145206
+INFO 2026-04-15 14:55:11,797 basehttp 8200 6544 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js HTTP/1.1" 200 322863
+INFO 2026-04-15 14:55:11,800 basehttp 8200 6288 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js HTTP/1.1" 200 1046583
+INFO 2026-04-15 14:55:11,811 basehttp 8200 11084 "GET /static/drf-yasg/insQ.min.js HTTP/1.1" 200 2093
+INFO 2026-04-15 14:55:11,816 basehttp 8200 15328 "GET /static/drf-yasg/immutable.min.js HTTP/1.1" 200 56904
+INFO 2026-04-15 14:55:11,836 basehttp 8200 3976 "GET /static/drf-yasg/swagger-ui-init.js HTTP/1.1" 200 15480
+INFO 2026-04-15 14:55:12,081 basehttp 8200 3976 "GET /api/docs/?format=openapi HTTP/1.1" 200 2062
+INFO 2026-04-15 14:55:12,230 basehttp 8200 3976 "GET /static/drf-yasg/swagger-ui-dist/favicon-32x32.png HTTP/1.1" 200 628
+INFO 2026-04-15 14:57:09,301 autoreload 8200 5680 C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py changed, reloading.
+INFO 2026-04-15 14:57:11,451 autoreload 3416 15144 Watching for file changes with StatReloader
+INFO 2026-04-15 14:57:26,382 basehttp 3416 6192 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 14:57:26,505 basehttp 3416 6192 "GET /api/docs/?format=openapi HTTP/1.1" 200 2065
+INFO 2026-04-15 14:59:04,948 autoreload 6052 9468 Watching for file changes with StatReloader
+INFO 2026-04-15 14:59:13,277 basehttp 6052 10192 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 14:59:13,328 basehttp 6052 10192 "GET /static/drf-yasg/style.css HTTP/1.1" 304 0
+INFO 2026-04-15 14:59:13,329 basehttp 6052 13408 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui.css HTTP/1.1" 304 0
+INFO 2026-04-15 14:59:13,340 basehttp 6052 10192 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:59:13,353 basehttp 6052 13408 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:59:13,354 basehttp 6052 10192 "GET /static/drf-yasg/insQ.min.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:59:13,392 basehttp 6052 13408 "GET /static/drf-yasg/immutable.min.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:59:13,406 basehttp 6052 10192 "GET /static/drf-yasg/swagger-ui-init.js HTTP/1.1" 304 0
+INFO 2026-04-15 14:59:13,498 basehttp 6052 10192 "GET /api/docs/?format=openapi HTTP/1.1" 200 2065
+INFO 2026-04-15 14:59:13,513 basehttp 6052 13408 "GET /static/drf-yasg/swagger-ui-dist/favicon-32x32.png HTTP/1.1" 304 0
+INFO 2026-04-15 14:59:40,138 autoreload 6052 9468 C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\urls.py changed, reloading.
+INFO 2026-04-15 14:59:41,890 autoreload 12212 9312 Watching for file changes with StatReloader
+INFO 2026-04-15 14:59:51,093 basehttp 12212 7664 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 14:59:51,242 basehttp 12212 7664 "GET /api/docs/?format=openapi HTTP/1.1" 200 2063
+INFO 2026-04-15 14:59:57,515 basehttp 12212 13276 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 14:59:57,874 basehttp 12212 13276 "GET /api/docs/?format=openapi HTTP/1.1" 200 2063
+INFO 2026-04-15 15:12:14,649 autoreload 12212 9312 C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py changed, reloading.
+INFO 2026-04-15 15:12:16,218 autoreload 14832 9552 Watching for file changes with StatReloader
+INFO 2026-04-15 15:12:23,450 autoreload 14832 9552 C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\urls.py changed, reloading.
+INFO 2026-04-15 15:12:25,242 autoreload 1688 14436 Watching for file changes with StatReloader
+INFO 2026-04-15 15:12:53,447 basehttp 1688 4736 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 15:12:53,499 basehttp 1688 4736 "GET /static/drf-yasg/style.css HTTP/1.1" 304 0
+INFO 2026-04-15 15:12:53,515 basehttp 1688 15120 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js HTTP/1.1" 304 0
+INFO 2026-04-15 15:12:53,529 basehttp 1688 4736 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui.css HTTP/1.1" 304 0
+INFO 2026-04-15 15:12:53,529 basehttp 1688 15120 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js HTTP/1.1" 304 0
+INFO 2026-04-15 15:12:53,557 basehttp 1688 4736 "GET /static/drf-yasg/insQ.min.js HTTP/1.1" 304 0
+INFO 2026-04-15 15:12:53,585 basehttp 1688 15120 "GET /static/drf-yasg/immutable.min.js HTTP/1.1" 304 0
+INFO 2026-04-15 15:12:53,592 basehttp 1688 4736 "GET /static/drf-yasg/swagger-ui-init.js HTTP/1.1" 304 0
+INFO 2026-04-15 15:12:53,719 basehttp 1688 4736 "GET /api/docs/?format=openapi HTTP/1.1" 200 2175
+INFO 2026-04-15 15:12:53,727 basehttp 1688 15120 "GET /static/drf-yasg/swagger-ui-dist/favicon-32x32.png HTTP/1.1" 304 0
+INFO 2026-04-15 16:47:19,829 basehttp 1688 14408 "GET /api/docs/ HTTP/1.1" 200 2227
+INFO 2026-04-15 16:47:19,883 basehttp 1688 14408 "GET /static/drf-yasg/style.css HTTP/1.1" 304 0
+INFO 2026-04-15 16:47:19,885 basehttp 1688 15340 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui.css HTTP/1.1" 304 0
+INFO 2026-04-15 16:47:19,893 basehttp 1688 14408 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js HTTP/1.1" 304 0
+INFO 2026-04-15 16:47:19,894 basehttp 1688 15340 "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js HTTP/1.1" 304 0
+INFO 2026-04-15 16:47:19,902 basehttp 1688 14408 "GET /static/drf-yasg/insQ.min.js HTTP/1.1" 304 0
+INFO 2026-04-15 16:47:19,902 basehttp 1688 15340 "GET /static/drf-yasg/immutable.min.js HTTP/1.1" 304 0
+INFO 2026-04-15 16:47:19,906 basehttp 1688 14408 "GET /static/drf-yasg/swagger-ui-init.js HTTP/1.1" 304 0
+INFO 2026-04-15 16:47:20,068 basehttp 1688 14408 "GET /api/docs/?format=openapi HTTP/1.1" 200 2175
+INFO 2026-04-15 16:47:20,070 basehttp 1688 15340 "GET /static/drf-yasg/swagger-ui-dist/favicon-32x32.png HTTP/1.1" 304 0
+INFO 2026-04-15 16:56:08,928 services 1688 9992 Starting external API calls for name: chiamaka
+INFO 2026-04-15 16:56:08,930 services 1688 9992 Fetching gender data for name: chiamaka
+INFO 2026-04-15 16:56:10,475 services 1688 9992 Successfully fetched gender data for chiamaka
+INFO 2026-04-15 16:56:10,477 services 1688 9992 Fetching age data for name: chiamaka
+INFO 2026-04-15 16:56:12,106 services 1688 9992 Successfully fetched age data for chiamaka: age=35, group=adult
+INFO 2026-04-15 16:56:12,108 services 1688 9992 Fetching nationality data for name: chiamaka
+INFO 2026-04-15 16:56:13,742 services 1688 9992 Successfully fetched nationality data for chiamaka: country=NG
+INFO 2026-04-15 16:56:13,744 services 1688 9992 Successfully fetched all data for chiamaka: {'gender': 'female', 'gender_probability': 0.98, 'sample_size': 6770, 'age': 35, 'age_group': 'adult', 'country_id': 'NG', 'country_probability': 0.4810104308490185}
+INFO 2026-04-15 16:56:14,044 basehttp 1688 9992 "POST /api/profiles HTTP/1.1" 201 285
+INFO 2026-04-15 16:57:08,764 services 1688 9992 Starting external API calls for name: bose
+INFO 2026-04-15 16:57:08,765 services 1688 9992 Fetching gender data for name: bose
+INFO 2026-04-15 16:57:09,957 services 1688 9992 Successfully fetched gender data for bose
+INFO 2026-04-15 16:57:09,959 services 1688 9992 Fetching age data for name: bose
+INFO 2026-04-15 16:57:11,394 services 1688 9992 Successfully fetched age data for bose: age=48, group=adult
+INFO 2026-04-15 16:57:11,396 services 1688 9992 Fetching nationality data for name: bose
+INFO 2026-04-15 16:57:12,621 services 1688 9992 Successfully fetched nationality data for bose: country=IN
+INFO 2026-04-15 16:57:12,628 services 1688 9992 Successfully fetched all data for bose: {'gender': 'female', 'gender_probability': 0.65, 'sample_size': 7455, 'age': 48, 'age_group': 'adult', 'country_id': 'IN', 'country_probability': 0.22246256085690216}
+INFO 2026-04-15 16:57:12,864 basehttp 1688 9992 "POST /api/profiles HTTP/1.1" 201 282
+ERROR 2026-04-15 16:58:25,624 log 1688 9992 Internal Server Error: /api/profiles
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.OperationalError: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py", line 110, in get
+    "count": len(serializer.data),
+                 ^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+                                                   ^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\models\query.py", line 400, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\models\query.py", line 1928, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.OperationalError: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+ERROR 2026-04-15 16:58:25,647 basehttp 1688 9992 "GET /api/profiles HTTP/1.1" 500 24371
+INFO 2026-04-15 16:58:46,320 basehttp 1688 11316 "GET /api/profiles HTTP/1.1" 200 418
+INFO 2026-04-15 17:01:54,270 basehttp 1688 11316 "GET /api/profiles HTTP/1.1" 200 418
+WARNING 2026-04-15 17:02:25,316 log 1688 11316 Not Found: /api/profiles/1
+WARNING 2026-04-15 17:02:25,321 basehttp 1688 11316 "GET /api/profiles/1 HTTP/1.1" 404 3303
+WARNING 2026-04-15 17:03:32,770 log 1688 11316 Not Found: /api/profiles/2
+WARNING 2026-04-15 17:03:32,781 basehttp 1688 11316 "GET /api/profiles/2 HTTP/1.1" 404 3303
+ERROR 2026-04-15 17:07:26,395 log 1688 11316 Internal Server Error: /api/profiles/019d91dc-6235-4767-a46d-b9b2dc63236b
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.OperationalError: SSL SYSCALL error: EOF detected
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\USER\Desktop\Profile-Integration\profile_setup_api\views.py", line 120, in get
+    profile = get_object_or_404(Profile, id=profile_id)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\shortcuts.py", line 86, in get_object_or_404
+    return queryset.get(*args, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\models\query.py", line 645, in get
+    num = len(clone)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\models\query.py", line 382, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\models\query.py", line 1928, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\USER\Desktop\Profile-Integration\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.OperationalError: SSL SYSCALL error: EOF detected
+
+ERROR 2026-04-15 17:07:26,400 basehttp 1688 11316 "GET /api/profiles/019d91dc-6235-4767-a46d-b9b2dc63236b HTTP/1.1" 500 23541
+INFO 2026-04-15 17:10:47,160 autoreload 1688 14436 C:\Users\USER\Desktop\Profile-Integration\config\settings.py changed, reloading.
+INFO 2026-04-15 17:13:27,527 autoreload 16548 15336 Watching for file changes with StatReloader
