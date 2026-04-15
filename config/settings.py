@@ -75,6 +75,8 @@ DATABASES = {
     )
 }
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
