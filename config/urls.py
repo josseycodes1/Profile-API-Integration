@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -32,9 +33,14 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
+def health_check(request):
+    return JsonResponse({"status": "ok"})
+
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
+    
+    path("kaithhealthcheck", health_check),
     
     # API endpoints
     path('api/', include('profile_setup_api.urls')),
