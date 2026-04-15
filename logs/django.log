@@ -597,3 +597,7 @@ django.db.utils.OperationalError: SSL SYSCALL error: EOF detected
 ERROR 2026-04-15 17:07:26,400 basehttp 1688 11316 "GET /api/profiles/019d91dc-6235-4767-a46d-b9b2dc63236b HTTP/1.1" 500 23541
 INFO 2026-04-15 17:10:47,160 autoreload 1688 14436 C:\Users\USER\Desktop\Profile-Integration\config\settings.py changed, reloading.
 INFO 2026-04-15 17:13:27,527 autoreload 16548 15336 Watching for file changes with StatReloader
+INFO 2026-04-15 17:16:10,910 basehttp 16548 16528 "GET /api/profiles/019d91dc-6235-4767-a46d-b9b2dc63236b HTTP/1.1" 200 282
+INFO 2026-04-15 17:16:40,381 basehttp 16548 16528 "DELETE /api/profiles/019d91dc-6235-4767-a46d-b9b2dc63236b HTTP/1.1" 204 0
+WARNING 2026-04-15 17:17:21,860 log 16548 16528 Not Found: /api/profiles/019d91dc-6235-4767-a46d-b9b2dc63236b
+WARNING 2026-04-15 17:17:21,863 basehttp 16548 16528 "DELETE /api/profiles/019d91dc-6235-4767-a46d-b9b2dc63236b HTTP/1.1" 404 48
