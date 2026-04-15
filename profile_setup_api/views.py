@@ -2,6 +2,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 from .models import Profile
 from .services import ExternalAPIService
 from .serializers import ProfileSerializer, ProfileListSerializer
@@ -12,6 +15,26 @@ from .serializers import ProfileSerializer, ProfileListSerializer
 # =========================
 class ProfileListCreateView(APIView):
 
+    @swagger_auto_schema(
+        operation_id="create_profile",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=["name"],
+            properties={
+                "name": openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description="Name of the user"
+                )
+            },
+        ),
+        responses={
+            201: openapi.Response("Created"),
+            200: openapi.Response("Already exists"),
+            400: "Bad Request",
+            422: "Invalid type",
+            502: "External API failure"
+        }
+    )
     def post(self, request):
         name = request.data.get("name")
 
@@ -54,28 +77,27 @@ class ProfileListCreateView(APIView):
         try:
             external_data = ExternalAPIService.fetch_all_data(name)
 
-            # VALIDATION FROM GRADER SPECS
             if not external_data.get("gender"):
                 return Response(
-                    {"status": "502", "message": "Genderize returned an invalid response"},
+                    {"status": "error", "message": "Genderize returned an invalid response"},
                     status=502
                 )
 
             if external_data.get("age") is None:
                 return Response(
-                    {"status": "502", "message": "Agify returned an invalid response"},
+                    {"status": "error", "message": "Agify returned an invalid response"},
                     status=502
                 )
 
             if not external_data.get("country_id"):
                 return Response(
-                    {"status": "502", "message": "Nationalize returned an invalid response"},
+                    {"status": "error", "message": "Nationalize returned an invalid response"},
                     status=502
                 )
 
         except Exception:
             return Response(
-                {"status": "502", "message": "External API failure"},
+                {"status": "error", "message": "External API failure"},
                 status=502
             )
 
@@ -89,7 +111,14 @@ class ProfileListCreateView(APIView):
             status=status.HTTP_201_CREATED
         )
 
-
+    @swagger_auto_schema(
+        operation_id="get_all_profiles",
+        manual_parameters=[
+            openapi.Parameter("gender", openapi.IN_QUERY, type=openapi.TYPE_STRING),
+            openapi.Parameter("country_id", openapi.IN_QUERY, type=openapi.TYPE_STRING),
+            openapi.Parameter("age_group", openapi.IN_QUERY, type=openapi.TYPE_STRING),
+        ]
+    )
     def get(self, request):
         queryset = Profile.objects.all()
 
@@ -121,6 +150,7 @@ class ProfileListCreateView(APIView):
 # =========================
 class ProfileDetailView(APIView):
 
+    @swagger_auto_schema(operation_id="get_profile")
     def get(self, request, profile_id):
         profile = get_object_or_404(Profile, id=profile_id)
 
@@ -132,9 +162,9 @@ class ProfileDetailView(APIView):
             status=200
         )
 
+    @swagger_auto_schema(operation_id="delete_profile")
     def delete(self, request, profile_id):
         profile = get_object_or_404(Profile, id=profile_id)
         profile.delete()
 
-        # REQUIRED: 204 NO CONTENT
         return Response(status=status.HTTP_204_NO_CONTENT)
