@@ -5,7 +5,6 @@ from .models import Profile
 def seed_profiles_from_json(json_url):
     """Seed database with profiles from JSON file"""
     try:
-        # Download JSON data
         response = requests.get(json_url)
         response.raise_for_status()
         profiles_data = response.json()
@@ -14,7 +13,6 @@ def seed_profiles_from_json(json_url):
         updated_count = 0
         
         for profile_data in profiles_data:
-            # Check if profile exists
             profile, created = Profile.objects.update_or_create(
                 name=profile_data['name'].lower(),
                 defaults={

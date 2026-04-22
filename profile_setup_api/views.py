@@ -65,7 +65,6 @@ class ProfileListCreateView(APIView):
                 status=status.HTTP_200_OK
             )
         
-        # External API
         try:
             external_data = ExternalAPIService.fetch_all_data(name)
         except Exception as e:
@@ -101,7 +100,6 @@ class ProfileListCreateView(APIView):
         try:
             queryset = Profile.objects.all()
             
-            # Apply filters
             gender = request.query_params.get("gender")
             if gender:
                 queryset = queryset.filter(gender__iexact=gender)
@@ -142,7 +140,6 @@ class ProfileListCreateView(APIView):
                 except ValueError:
                     return Response({"status": "error", "message": "Invalid query parameters"}, status=422)
             
-            # Apply sorting
             sort_by = request.query_params.get("sort_by", "created_at")
             order = request.query_params.get("order", "desc")
             
@@ -155,7 +152,6 @@ class ProfileListCreateView(APIView):
             else:
                 queryset = queryset.order_by(f'-{sort_by}')
             
-            # Apply pagination
             page = request.query_params.get("page", 1)
             limit = request.query_params.get("limit", 10)
             
@@ -178,7 +174,6 @@ class ProfileListCreateView(APIView):
             except EmptyPage:
                 page_obj = paginator.page(paginator.num_pages)
             
-            # Serialize data
             data = ProfileListSerializer(page_obj, many=True).data
             
             return Response(
@@ -239,7 +234,6 @@ class NaturalLanguageSearchView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        # Parse the natural language query
         filters = NaturalLanguageParser.parse(query)
         
         if 'error' in filters:
@@ -248,7 +242,6 @@ class NaturalLanguageSearchView(APIView):
                 status=status.HTTP_422_UNPROCESSABLE_ENTITY
             )
         
-        # Build queryset based on parsed filters
         queryset = Profile.objects.all()
         
         if 'gender' in filters:
@@ -272,7 +265,6 @@ class NaturalLanguageSearchView(APIView):
         if 'min_country_probability' in filters:
             queryset = queryset.filter(country_probability__gte=filters['min_country_probability'])
         
-        # Apply pagination
         page = request.query_params.get("page", 1)
         limit = request.query_params.get("limit", 10)
         

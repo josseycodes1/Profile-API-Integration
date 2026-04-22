@@ -1,171 +1,337 @@
 # Profile Integration API
 
-A Django-based REST API that integrates with external APIs (Genderize, Agify, Nationalize) to create and manage user profiles with demographic information.
+A Django-based REST API that integrates with external APIs (Genderize, Agify, Nationalize) to create and manage user profiles with demographic information. Stage 2 adds advanced filtering, sorting, pagination, and natural language search capabilities.
+
+---
 
 ## Features
+
+### Core Features
 
 - Create profiles with automatic data fetching from three external APIs
 - Idempotent profile creation (same name returns existing profile)
 - Retrieve single or multiple profiles with filtering
 - Delete profiles
-- Case-insensitive filtering by gender, country, and age group
 - UUID v7 for unique identifiers
 - Comprehensive error handling and logging
 - CORS enabled for cross-origin requests
 
-## Natural Language Query Parsing
+### Stage 2 New Features
 
-### Approach
+- **Advanced Filtering**: Filter by gender, age_group, country_id, age range, and probability scores
+- **Sorting**: Sort by age, created_at, or gender_probability (ascending/descending)
+- **Pagination**: Page through results with configurable page size (max 50)
+- **Natural Language Search**: Query profiles using plain English phrases
+- **Rule-based Query Parsing**: Convert natural language into structured filters without AI/LLM
 
-The natural language parser uses rule-based pattern matching to convert plain English queries into structured filters.
-
-### Supported Keywords and Mappings
-
-#### Gender
-
-- Male: "male", "man", "men", "boy", "boys"
-- Female: "female", "woman", "women", "girl", "girls"
-
-#### Age Groups
-
-- "child" → ages 0-12
-- "teenager"/"teen"/"teens" → ages 13-19
-- "adult"/"adults" → ages 20-59
-- "senior"/"seniors"/"elderly"/"old" → ages 60+
-
-#### Special Age Mappings
-
-- "young" → ages 16-24 (not stored as age_group)
-- "middle aged" → ages 35-55
-
-#### Age Comparisons
-
-- "above X", "over X", "older than X" → min_age = X
-- "below X", "under X", "younger than X" → max_age = X
-- "between X and Y" → min_age = X, max_age = Y
-
-#### Countries
-
-- Supports 30+ countries including: Nigeria(NG), Ghana(GH), Kenya(KE), South Africa(ZA), etc.
-
-#### Confidence/Probability
-
-- "high confidence" → min probability = 0.8
-- "confident" → min probability = 0.7
-- "probability above X" → min probability = X
-
-### Example Queries
-
-| Query                         | Mapped Filters                                     |
-| ----------------------------- | -------------------------------------------------- |
-| "young males from nigeria"    | gender=male, min_age=16, max_age=24, country_id=NG |
-| "females above 30"            | gender=female, min_age=30                          |
-| "adult males from kenya"      | gender=male, age_group=adult, country_id=KE        |
-| "teenagers between 15 and 18" | age_group=teenager, min_age=15, max_age=18         |
-| "high confidence females"     | gender=female, min_gender_probability=0.8          |
-
-### Limitations
-
-- Does not handle complex boolean logic (AND/OR combinations)
-- Cannot process negation (e.g., "not from nigeria")
-- Limited to single country detection
-- Age ranges are inclusive
-- No support for relative time (e.g., "recent profiles")
-- Country names must match predefined list
-- Does not handle misspellings or synonyms beyond defined keywords
-- Cannot process queries with multiple conflicting conditions
+---
 
 ## API Endpoints
 
-### Create Profile
+### 1. Create Profile
 
-`POST /api/profiles`
+**POST** `/api/profiles/`
+
+**Request Body**
 
 ```json
 {
   "name": "ella"
 }
-Get Single Profile
-GET /api/profiles/{id}
+```
 
-Get All Profiles
-GET /api/profiles?gender=male&country_id=NG&age_group=adult
+**Success Response (201 Created)**
 
-Delete Profile
-DELETE /api/profiles/{id}
+```json
+{
+  "status": "success",
+  "data": {
+    "id": "019db50a-d637-4263-aae5-38e49aea85d0",
+    "name": "ella",
+    "gender": "female",
+    "gender_probability": 0.99,
+    "age": 46,
+    "age_group": "adult",
+    "country_id": "NG",
+    "country_name": "Nigeria",
+    "country_probability": 0.85,
+    "created_at": "2026-04-22T11:54:39.544218Z"
+  }
+}
+```
 
-Installation
-Clone the repository:
+**If profile already exists (200 OK)**
 
-bash
+```json
+{
+  "status": "success",
+  "message": "Profile already exists",
+  "data": {}
+}
+```
+
+---
+
+### 2. Get All Profiles
+
+**GET** `/api/profiles/`
+
+**Query Parameters**
+
+| Parameter               | Type    | Description                           |
+| ----------------------- | ------- | ------------------------------------- |
+| gender                  | string  | male/female                           |
+| age_group               | string  | child/teenager/adult/senior           |
+| country_id              | string  | NG, KE, US, etc.                      |
+| min_age                 | integer | Minimum age                           |
+| max_age                 | integer | Maximum age                           |
+| min_gender_probability  | float   | 0–1                                   |
+| min_country_probability | float   | 0–1                                   |
+| sort_by                 | string  | age / created_at / gender_probability |
+| order                   | string  | asc / desc                            |
+| page                    | integer | default 1                             |
+| limit                   | integer | default 10, max 50                    |
+
+**Example**
+
+```
+GET /api/profiles/?gender=male&country_id=NG&min_age=25&sort_by=age&order=desc&page=1&limit=10
+```
+
+---
+
+### 3. Get Single Profile
+
+**GET** `/api/profiles/{id}/`
+
+---
+
+### 4. Delete Profile
+
+**DELETE** `/api/profiles/{id}/`
+**Response:** 204 No Content
+
+---
+
+### 5. Natural Language Search
+
+**GET** `/api/profiles/search/?q=your_query`
+
+**Examples**
+
+```
+young males from nigeria
+females above 30
+adult males from kenya
+```
+
+---
+
+### 6. Health Check
+
+**GET** `/health/`
+
+```json
+{
+  "status": "ok",
+  "message": "Profile Integration API is running"
+}
+```
+
+---
+
+## Natural Language Parsing
+
+Uses **rule-based pattern matching** (no AI/LLM).
+
+### Example Mappings
+
+| Query                    | Result                                   |
+| ------------------------ | ---------------------------------------- |
+| young males from nigeria | gender=male, age 16–24, country=NG       |
+| females above 30         | gender=female, min_age=30                |
+| adult males from kenya   | gender=male, age_group=adult, country=KE |
+
+### Limitations
+
+- No AND/OR logic
+- No negation
+- Single country detection
+- No typo correction
+- Limited keyword mapping
+
+---
+
+## Error Format
+
+```json
+{
+  "status": "error",
+  "message": "Error message"
+}
+```
+
+| Code | Meaning            |
+| ---- | ------------------ |
+| 400  | Bad request        |
+| 404  | Not found          |
+| 422  | Invalid query      |
+| 500  | Server error       |
+| 502  | External API error |
+
+---
+
+## Installation
+
+### Prerequisites
+
+- Python 3.11+
+- PostgreSQL
+
+---
+
+### 1. Clone Project
+
+```bash
 git clone <repository-url>
 cd Profile-Integration
-Create virtual environment:
-
-bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-Install dependencies:
-
-bash
-pip install -r requirements.txt
-Set up environment variables:
-
-bash
-cp .env.example .env
-# Edit .env with your database credentials
-Run migrations:
-
-bash
-python manage.py migrate
-Start the server:
-
-bash
-python manage.py runserver
-Deployment on Leapcell
-Push code to GitHub repository
-
-Connect repository to Leapcell
-Set environment variables in Leapcell dashboard
-Deploy with Procfile and runtime.txt
-
-Testing
-bash
-python manage.py test
-
-## Environment Variables
-DB_NAME: PostgreSQL database name
-DB_USER: Database user
-DB_PASSWORD: Database password
-DB_HOST: Database host
-DB_PORT: Database port
-DB_SSLMODE: SSL mode (require/prefer)
-SECRET_KEY: Django secret key
-DEBUG: Set to False in production
-ALLOWED_HOSTS: Comma-separated list of allowed hosts
-
-## Error Handling
-The API returns appropriate HTTP status codes:
-200: Success
-201: Created
-204: No Content (Delete success)
-400: Bad Request (Missing name)
-404: Not Found
-422: Unprocessable Entity (Invalid type)
-500: Internal Server Error
-502: Bad Gateway (External API error)
-
-## Logging
-Logs are stored in logs/django.log and include:
-API request/response details
-External API call status
-Error traces
-Database operations
-
-## Technologies
-Django 4.2.7
-PostgreSQL
-Gunicorn (production server)
-Requests (external API calls)
-django-cors-headers
 ```
+
+---
+
+### 2. Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+**Activate**
+
+```bash
+# Windows
+venv\Scripts\activate
+
+# Mac/Linux
+source venv/bin/activate
+```
+
+---
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 4. Install Required Packages (if no requirements.txt yet)
+
+```bash
+pip install django djangorestframework psycopg2-binary requests drf-yasg django-cors-headers python-dotenv gunicorn
+```
+
+---
+
+### 5. Setup Environment Variables
+
+```bash
+cp .env.example .env
+```
+
+Example `.env`:
+
+```
+DB_NAME=mnc_db
+DB_USER=postgres
+DB_PASSWORD=yourpassword
+DB_HOST=localhost
+DB_PORT=5432
+
+SECRET_KEY=your_secret_key
+DEBUG=True
+```
+
+---
+
+### 6. Run Migrations
+
+```bash
+python manage.py migrate
+```
+
+---
+
+### 7. Seed Database (Optional)
+
+```bash
+python manage.py seed_profiles --source sample
+```
+
+---
+
+### 8. Run Server
+
+```bash
+python manage.py runserver
+```
+
+---
+
+## Docker (Optional)
+
+```bash
+docker compose up --build
+```
+
+---
+
+## Deployment
+
+```
+https://rofile--ntegration-adewumijosephine3516-kodp7ruz.leapcell.dev
+```
+
+---
+
+## API Docs
+
+```
+/api/docs/
+```
+
+---
+
+## Testing
+
+```bash
+curl.exe "https://your-api.com/api/profiles/?gender=male&page=1&limit=10"
+
+curl.exe "https://your-api.com/api/profiles/search/?q=young%20males%20from%20nigeria"
+
+Invoke-RestMethod -Uri "https://your-api.com/api/profiles/" -Method POST -ContentType "application/json" -Body '{"name":"testuser"}'
+```
+
+---
+
+## Tech Stack
+
+- Django
+- Django REST Framework
+- PostgreSQL
+- drf-yasg
+- Gunicorn
+- Requests
+- django-cors-headers
+
+---
+
+## Author
+
+Backend Wizard - Josseycodes
+
+---
+
+## License
+
+MIT

@@ -37,7 +37,6 @@ class ExternalAPIService:
             response.raise_for_status()
             data = response.json()
             
-            # Validate response
             if data.get('gender') is None or data.get('count', 0) == 0:
                 logger.error(f"Invalid gender response for {name}: {data}")
                 return None, False
@@ -69,7 +68,6 @@ class ExternalAPIService:
             response.raise_for_status()
             data = response.json()
             
-            # Validate response
             if data.get('age') is None:
                 logger.error(f"Invalid age response for {name}: {data}")
                 return None, False
@@ -103,13 +101,11 @@ class ExternalAPIService:
             response.raise_for_status()
             data = response.json()
             
-            # Validate response
             country_data = data.get('country', [])
             if not country_data or len(country_data) == 0:
                 logger.error(f"Invalid nationality response for {name}: No country data")
                 return None, False
             
-            # Get country with highest probability
             top_country = max(country_data, key=lambda x: x.get('probability', 0))
             
             logger.info(f"Successfully fetched nationality data for {name}: country={top_country['country_id']}")
@@ -129,26 +125,22 @@ class ExternalAPIService:
     def fetch_all_data(name: str) -> Dict[str, Any]:
         """Fetch data from all three APIs"""
         logger.info(f"Starting external API calls for name: {name}")
-        
-        # Fetch gender data
+       
         gender_data, gender_success = ExternalAPIService.fetch_gender_data(name)
         if not gender_success:
             logger.error(f"Gender API failed for {name}")
             raise ValueError("Genderize returned an invalid response")
         
-        # Fetch age data
         age_data, age_success = ExternalAPIService.fetch_age_data(name)
         if not age_success:
             logger.error(f"Age API failed for {name}")
             raise ValueError("Agify returned an invalid response")
         
-        # Fetch nationality data
         nationality_data, nationality_success = ExternalAPIService.fetch_nationality_data(name)
         if not nationality_success:
             logger.error(f"Nationality API failed for {name}")
             raise ValueError("Nationalize returned an invalid response")
         
-        # Combine all data
         combined_data = {
             **gender_data,
             **age_data,

@@ -5,7 +5,6 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-# Swagger/OpenAPI configuration
 schema_view = get_schema_view(
     openapi.Info(
         title="Profile Integration API",
@@ -25,11 +24,7 @@ def health_check(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('health/', health_check, name='health-check'),
-    
-    # Profile API endpoints
     path('api/', include('profile_setup_api.urls')),
-    
-    # Swagger documentation
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

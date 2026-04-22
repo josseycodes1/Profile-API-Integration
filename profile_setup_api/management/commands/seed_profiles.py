@@ -39,7 +39,6 @@ class Command(BaseCommand):
         self.stdout.write(f"Fetching profiles from {base_url}...")
         
         try:
-            # Fetch all profiles from deployed API (with large limit)
             response = requests.get(f"{base_url}/api/profiles/?limit=100", timeout=30)
             response.raise_for_status()
             
@@ -52,12 +51,10 @@ class Command(BaseCommand):
             skipped_count = 0
             
             for profile_data in profiles_data:
-                # Check if profile already exists locally
                 if Profile.objects.filter(name=profile_data['name'].lower()).exists():
                     skipped_count += 1
                     continue
                 
-                # Determine age group if not provided
                 age = profile_data.get('age', 30)
                 if age <= 12:
                     age_group = "child"
@@ -68,7 +65,6 @@ class Command(BaseCommand):
                 else:
                     age_group = "senior"
                 
-                # Create profile locally
                 Profile.objects.create(
                     name=profile_data['name'].lower(),
                     gender=profile_data.get('gender', 'unknown'),
@@ -84,7 +80,7 @@ class Command(BaseCommand):
                 self.stdout.write(f"Created profile for {profile_data['name']}")
             
             self.stdout.write(self.style.SUCCESS(
-                f'\n✅ Successfully seeded: {created_count} created, {skipped_count} skipped'
+                f'\n Successfully seeded: {created_count} created, {skipped_count} skipped'
             ))
             self.stdout.write(f'Total profiles in local database: {Profile.objects.count()}')
             
@@ -97,7 +93,6 @@ class Command(BaseCommand):
         """Create sample profiles for local testing"""
         self.stdout.write("Creating sample profiles...")
         
-        # Sample countries with their codes and names
         countries = [
             ('NG', 'Nigeria'), ('KE', 'Kenya'), ('ZA', 'South Africa'), 
             ('GH', 'Ghana'), ('EG', 'Egypt'), ('MA', 'Morocco'),
@@ -108,15 +103,14 @@ class Command(BaseCommand):
             ('TZ', 'Tanzania'), ('UG', 'Uganda')
         ]
         
-        # Sample names with their typical gender mappings
         names_data = [
-            # Male names
+            
             ('emmanuel', 'male', 0.95, 1500), ('james', 'male', 0.98, 2000), ('john', 'male', 0.99, 5000),
             ('michael', 'male', 0.97, 4500), ('david', 'male', 0.96, 3800), ('joseph', 'male', 0.94, 3200),
             ('peter', 'male', 0.95, 2800), ('paul', 'male', 0.93, 2500), ('george', 'male', 0.92, 2100),
             ('daniel', 'male', 0.96, 3500), ('samuel', 'male', 0.94, 2900), ('benjamin', 'male', 0.93, 2600),
             ('oliver', 'male', 0.95, 3100), ('henry', 'male', 0.94, 2700), ('jack', 'male', 0.96, 3300),
-            # Female names
+          
             ('mary', 'female', 0.97, 4200), ('sarah', 'female', 0.98, 3900), ('elizabeth', 'female', 0.96, 4800),
             ('jane', 'female', 0.95, 3400), ('emily', 'female', 0.97, 4100), ('lisa', 'female', 0.94, 2900),
             ('anna', 'female', 0.96, 3700), ('maria', 'female', 0.95, 5600), ('grace', 'female', 0.97, 3100),
@@ -128,16 +122,14 @@ class Command(BaseCommand):
         skipped_count = 0
         
         for name, gender, gender_prob, sample_size in names_data:
-            # Check if profile already exists
+
             if Profile.objects.filter(name=name).exists():
                 skipped_count += 1
                 continue
             
-            # Random age based on distribution
             age_choices = list(range(18, 65)) + list(range(25, 50)) * 3
             age = random.choice(age_choices)
             
-            # Determine age group
             if age <= 12:
                 age_group = "child"
             elif age <= 19:
@@ -147,14 +139,11 @@ class Command(BaseCommand):
             else:
                 age_group = "senior"
             
-            # Random country
             country_code, country_name = random.choice(countries)
             
-            # Random probabilities
             gender_probability = random.uniform(0.7, 0.99)
             country_probability = random.uniform(0.6, 0.95)
             
-            # Create profile with sample_size
             Profile.objects.create(
                 name=name,
                 gender=gender,
@@ -169,7 +158,6 @@ class Command(BaseCommand):
             created_count += 1
             self.stdout.write(f"Created profile for {name} - {age} years, {gender}, from {country_name}")
         
-        # Generate additional random profiles
         additional_count = 50
         first_names = ['Alex', 'Chris', 'Pat', 'Jordan', 'Taylor', 'Morgan', 'Riley', 'Casey']
         last_names = ['Smith', 'Jones', 'Williams', 'Brown', 'Davis', 'Miller', 'Wilson', 'Moore']
@@ -210,6 +198,6 @@ class Command(BaseCommand):
             created_count += 1
         
         self.stdout.write(self.style.SUCCESS(
-            f'\n✅ Successfully seeded sample data: {created_count} created, {skipped_count} skipped'
+            f'\n Successfully seeded sample data: {created_count} created, {skipped_count} skipped'
         ))
         self.stdout.write(f'Total profiles in database: {Profile.objects.count()}')
