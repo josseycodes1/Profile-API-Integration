@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'profile_setup_api',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -76,8 +77,10 @@ DATABASES = {
     )
 }
 
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+# Static files
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

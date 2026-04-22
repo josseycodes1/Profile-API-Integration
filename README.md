@@ -13,6 +13,68 @@ A Django-based REST API that integrates with external APIs (Genderize, Agify, Na
 - Comprehensive error handling and logging
 - CORS enabled for cross-origin requests
 
+## Natural Language Query Parsing
+
+### Approach
+
+The natural language parser uses rule-based pattern matching to convert plain English queries into structured filters.
+
+### Supported Keywords and Mappings
+
+#### Gender
+
+- Male: "male", "man", "men", "boy", "boys"
+- Female: "female", "woman", "women", "girl", "girls"
+
+#### Age Groups
+
+- "child" → ages 0-12
+- "teenager"/"teen"/"teens" → ages 13-19
+- "adult"/"adults" → ages 20-59
+- "senior"/"seniors"/"elderly"/"old" → ages 60+
+
+#### Special Age Mappings
+
+- "young" → ages 16-24 (not stored as age_group)
+- "middle aged" → ages 35-55
+
+#### Age Comparisons
+
+- "above X", "over X", "older than X" → min_age = X
+- "below X", "under X", "younger than X" → max_age = X
+- "between X and Y" → min_age = X, max_age = Y
+
+#### Countries
+
+- Supports 30+ countries including: Nigeria(NG), Ghana(GH), Kenya(KE), South Africa(ZA), etc.
+
+#### Confidence/Probability
+
+- "high confidence" → min probability = 0.8
+- "confident" → min probability = 0.7
+- "probability above X" → min probability = X
+
+### Example Queries
+
+| Query                         | Mapped Filters                                     |
+| ----------------------------- | -------------------------------------------------- |
+| "young males from nigeria"    | gender=male, min_age=16, max_age=24, country_id=NG |
+| "females above 30"            | gender=female, min_age=30                          |
+| "adult males from kenya"      | gender=male, age_group=adult, country_id=KE        |
+| "teenagers between 15 and 18" | age_group=teenager, min_age=15, max_age=18         |
+| "high confidence females"     | gender=female, min_gender_probability=0.8          |
+
+### Limitations
+
+- Does not handle complex boolean logic (AND/OR combinations)
+- Cannot process negation (e.g., "not from nigeria")
+- Limited to single country detection
+- Age ranges are inclusive
+- No support for relative time (e.g., "recent profiles")
+- Country names must match predefined list
+- Does not handle misspellings or synonyms beyond defined keywords
+- Cannot process queries with multiple conflicting conditions
+
 ## API Endpoints
 
 ### Create Profile
