@@ -1,52 +1,39 @@
 from django.contrib import admin
-from django.http import JsonResponse
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-# Swagger/OpenAPI configuration
 schema_view = get_schema_view(
     openapi.Info(
-        title="Profile Integration API",
+        title="MNC API",
         default_version='v1',
-        description="""
-        API for creating and managing user profiles with demographic data from external APIs.
-        
-        ## Features
-        - Create profiles with automatic data fetching from Genderize, Agify, and Nationalize APIs
-        - Idempotent profile creation (same name returns existing profile)
-        - Retrieve single or multiple profiles with filtering
-        - Delete profiles
-        - Case-insensitive filtering by gender, country, and age group
-        
-        ## External APIs Used
-        - Genderize API: Determines gender from name
-        - Agify API: Predicts age from name
-        - Nationalize API: Predicts nationality from name
-        """,
-        terms_of_service="https://www.example.com/terms/",
-        contact=openapi.Contact(email="support@example.com"),
-        license=openapi.License(name="MIT License"),
+        description="Self-Paced Mentoring & Coaching Platform API",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@mnc.local"),
+        license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=[permissions.AllowAny],
+    permission_classes=(permissions.AllowAny,),
 )
 
-def health_check(request):
-    return JsonResponse({"status": "ok"})
-
 urlpatterns = [
-    # Admin
     path('admin/', admin.site.urls),
+    path('api/v1/auth/', include('accounts.urls')),
+    path('api/v1/learning/', include('learning.urls')),
+    path('api/v1/progress/', include('progress.urls')),
+    path('api/v1/notifications/', include('notifications.urls')),
     
-    path("kaithhealthcheck", health_check),
-    
-    # API endpoints
+    # ADD THIS LINE - Include your profile API
     path('api/', include('profile_setup_api.urls')),
     
-    # Swagger documentation
-    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('api/swagger.json/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('api/docs', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
+
+# Only add static/media URLs in development
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
