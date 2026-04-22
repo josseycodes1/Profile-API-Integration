@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'profile_setup_api',
-    'whitenoise.runserver_nostatic',
+    'whitenoise.runserver_nostatic', 
 ]
 
 MIDDLEWARE = [

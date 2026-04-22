@@ -1,39 +1,35 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from django.http import JsonResponse
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+# Swagger/OpenAPI configuration
 schema_view = get_schema_view(
     openapi.Info(
-        title="MNC API",
+        title="Profile Integration API",
         default_version='v1',
-        description="Self-Paced Mentoring & Coaching Platform API",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@mnc.local"),
-        license=openapi.License(name="BSD License"),
+        description="API for creating and managing user profiles with demographic data from external APIs.",
+        terms_of_service="https://www.example.com/terms/",
+        contact=openapi.Contact(email="support@profileapi.com"),
+        license=openapi.License(name="MIT License"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
 
+def health_check(request):
+    return JsonResponse({"status": "ok", "message": "Profile Integration API is running"})
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/auth/', include('accounts.urls')),
-    path('api/v1/learning/', include('learning.urls')),
-    path('api/v1/progress/', include('progress.urls')),
-    path('api/v1/notifications/', include('notifications.urls')),
+    path('health/', health_check, name='health-check'),
     
-    # ADD THIS LINE - Include your profile API
+    # Profile API endpoints
     path('api/', include('profile_setup_api.urls')),
     
-    path('api/docs', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    # Swagger documentation
+    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
-
-# Only add static/media URLs in development
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
