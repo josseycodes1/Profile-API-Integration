@@ -14,6 +14,7 @@ import base64
 import secrets
 import logging
 import requests
+from urllib.parse import urlencode
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -31,6 +32,10 @@ logger = logging.getLogger(__name__)
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://insighta-web-azure.vercel.app/")
 CLI_CALLBACK_URL = "http://localhost:9876/callback"
+GITHUB_WEB_CALLBACK_URL = os.getenv(
+    "GITHUB_WEB_CALLBACK_URL",
+    "https://rofile--ntegration-adewumijosephine3516-kodp7ruz.leapcell.dev/auth/github/callback",
+)
 GITHUB_AUTHORIZE_URL = "https://github.com/login/oauth/authorize"
 GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token"
 GITHUB_USER_URL = "https://api.github.com/user"
@@ -168,17 +173,15 @@ class GitHubOAuthStartView(APIView):
         state = secrets.token_urlsafe(32)
         code_verifier = secrets.token_urlsafe(64)
         code_challenge = _base64url_sha256(code_verifier)
-        callback_url = request.build_absolute_uri("/auth/github/callback")
-
-        auth_url = (
-            f"{GITHUB_AUTHORIZE_URL}"
-            f"?client_id={client_id}"
-            f"&redirect_uri={callback_url}"
-            f"&scope=user:email"
-            f"&state={state}"
-            f"&code_challenge={code_challenge}"
-            f"&code_challenge_method=S256"
-        )
+        callback_url = os.getenv("GITHUB_WEB_CALLBACK_URL") or request.build_absolute_uri("/auth/github/callback")
+        auth_url = f"{GITHUB_AUTHORIZE_URL}?{urlencode({
+            'client_id': client_id,
+            'redirect_uri': callback_url,
+            'scope': 'user:email',
+            'state': state,
+            'code_challenge': code_challenge,
+            'code_challenge_method': 'S256',
+        })}"
 
         response = redirect(auth_url)
         cookie_kwargs = {
@@ -229,7 +232,7 @@ class GitHubOAuthCallbackView(APIView):
                     "client_id": os.getenv("GITHUB_CLIENT_ID"),
                     "client_secret": os.getenv("GITHUB_CLIENT_SECRET"),
                     "code": code,
-                    "redirect_uri": request.build_absolute_uri("/auth/github/callback"),
+                    "redirect_uri": os.getenv("GITHUB_WEB_CALLBACK_URL") or request.build_absolute_uri("/auth/github/callback"),
                     "code_verifier": code_verifier,
                 },
             )

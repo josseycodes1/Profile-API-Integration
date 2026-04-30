@@ -178,6 +178,7 @@ DATABASE_URL=postgres://user:password@host:5432/dbname
 FRONTEND_URL=http://localhost:3000
 GITHUB_CLIENT_ID=replace-me
 GITHUB_CLIENT_SECRET=replace-me
+GITHUB_WEB_CALLBACK_URL=https://your-backend.example.com/auth/github/callback
 GITHUB_CLI_CLIENT_ID=replace-me
 GITHUB_CLI_CLIENT_SECRET=replace-me
 ```
