@@ -1,528 +1,189 @@
-# Profile Integration API
+# Insighta Labs+ Backend API
 
-A Django-based REST API that integrates with external APIs (Genderize, Agify, Nationalize) to create and manage user profiles with demographic information. Stage 2 adds advanced filtering, sorting, pagination, and natural language search capabilities.
+Django REST API for the Insighta Labs+ Profile Intelligence System. The backend is the single source of truth for authentication, role enforcement, profile data, natural language search, CSV export, rate limiting, and audit logging.
 
----
+## Live URL
 
-                ┌───────────────┐
-                │  GitHub OAuth │
-                └──────┬────────┘
-                       │
-                       ▼
-        ┌────────────────────────────┐
-        │ Django Auth Layer (allauth)│
-        └────────────┬───────────────┘
-                     │
-     ┌───────────────┴────────────────┐
-     ▼                                ▼
+- Backend: `https://rofile--ntegration-adewumijosephine3516-kodp7ruz.leapcell.dev`
+- API docs: `/api/docs/`
+- Health check: `/health/`
 
-JWT Tokens Session Cookies
-(CLI / API) (Web Portal)
-│ │
-▼ ▼
-┌──────────────┐ ┌──────────────────┐
-│ REST API │ │ Web Frontend │
-│ Profile System│ │ (Next.js) │
-└──────┬────────┘ └──────────────────┘
-│
-▼
-┌─────────────────────┐
-│ Role-Based Access │
-│ Admin / Analyst │
-└─────────────────────┘
-│
-▼
-┌─────────────────────┐
-│ PostgreSQL (Leapcell│
-│ Hosted DB) │
-└─────────────────────┘
+## System Architecture
 
-## Features
-
-### Core Features
-
-- Create profiles with automatic data fetching from three external APIs
-- Idempotent profile creation (same name returns existing profile)
-- Retrieve single or multiple profiles with filtering
-- Delete profiles
-- UUID v7 for unique identifiers
-- Comprehensive error handling and logging
-- CORS enabled for cross-origin requests
-
-### Stage 2 New Features
-
-- **Advanced Filtering**: Filter by gender, age_group, country_id, age range, and probability scores
-- **Sorting**: Sort by age, created_at, or gender_probability (ascending/descending)
-- **Pagination**: Page through results with configurable page size (max 50)
-- **Natural Language Search**: Query profiles using plain English phrases
-- **Rule-based Query Parsing**: Convert natural language into structured filters without AI/LLM
-
----
-
-## API Endpoints
-
-### 1. Create Profile
-
-**POST** `/api/profiles/`
-
-**Request Body**
-
-```json
-{
-  "name": "ella"
-}
+```text
+CLI client                  Web portal
+Bearer JWT                  HTTP-only cookies
+    |                            |
+    +------------+---------------+
+                 |
+          Django REST API
+          /api/v1/*
+                 |
+      Auth, RBAC, throttling,
+      logging, API versioning
+                 |
+      Profile Intelligence API
+      filters, sorting, NLP,
+      pagination, CSV export
+                 |
+        PostgreSQL in production
+        SQLite for local/CI
 ```
 
-**Success Response (201 Created)**
+## Authentication Flow
 
-```json
-{
-  "status": "success",
-  "data": {
-    "id": "019db50a-d637-4263-aae5-38e49aea85d0",
-    "name": "ella",
-    "gender": "female",
-    "gender_probability": 0.99,
-    "age": 46,
-    "age_group": "adult",
-    "country_id": "NG",
-    "country_name": "Nigeria",
-    "country_probability": 0.85,
-    "created_at": "2026-04-22T11:54:39.544218Z"
-  }
-}
-```
+The platform supports GitHub OAuth for browser users and a CLI OAuth exchange for terminal users.
 
-**If profile already exists (200 OK)**
+Web flow:
 
-```json
-{
-  "status": "success",
-  "message": "Profile already exists",
-  "data": {}
-}
-```
+1. User clicks "Continue with GitHub".
+2. Django/allauth completes the GitHub OAuth callback.
+3. The backend creates or retrieves the user.
+4. JWT access and refresh tokens are issued.
+5. Web sessions use HTTP-only cookies where available.
 
----
+CLI flow:
 
-### 2. Get All Profiles
+1. `insighta login` generates `state`, `code_verifier`, and `code_challenge`.
+2. The CLI opens the GitHub OAuth page and starts a temporary callback server.
+3. The CLI validates `state` after the redirect.
+4. The CLI sends `code`, `code_verifier`, and `code_challenge` to `/api/v1/auth/github/cli/`.
+5. The backend validates PKCE, exchanges the GitHub code, creates or updates the user, and returns JWT tokens.
 
-**GET** `/api/profiles/`
+## Token Handling
 
-**Query Parameters**
+- Access token lifetime: 3 minutes.
+- Refresh token lifetime: 5 minutes.
+- Refresh tokens rotate on refresh.
+- Old refresh tokens are blacklisted after rotation.
+- CLI credentials are stored locally at `~/.insighta/credentials.json`.
 
-| Parameter               | Type    | Description                           |
-| ----------------------- | ------- | ------------------------------------- |
-| gender                  | string  | male/female                           |
-| age_group               | string  | child/teenager/adult/senior           |
-| country_id              | string  | NG, KE, US, etc.                      |
-| min_age                 | integer | Minimum age                           |
-| max_age                 | integer | Maximum age                           |
-| min_gender_probability  | float   | 0–1                                   |
-| min_country_probability | float   | 0–1                                   |
-| sort_by                 | string  | age / created_at / gender_probability |
-| order                   | string  | asc / desc                            |
-| page                    | integer | default 1                             |
-| limit                   | integer | default 10, max 50                    |
+## Role Enforcement
 
-**Example**
+Users have one of two roles:
 
-```
-GET /api/profiles/?gender=male&country_id=NG&min_age=25&sort_by=age&order=desc&page=1&limit=10
-```
+| Role | Permissions |
+| --- | --- |
+| `admin` | Create, read, search, delete, and export profiles |
+| `analyst` | Read and search profiles only |
 
----
+Every profile endpoint requires authentication. Profile endpoints also require the `X-API-Version: 1` header.
 
-### 3. Get Single Profile
-
-**GET** `/api/profiles/{id}/`
-
----
-
-### 4. Delete Profile
-
-**DELETE** `/api/profiles/{id}/`
-**Response:** 204 No Content
-
----
-
-### 5. Natural Language Search
-
-**GET** `/api/profiles/search/?q=your_query`
-
-**Examples**
-
-```
-young males from nigeria
-females above 30
-adult males from kenya
-```
-
----
-
-### 6. Health Check
-
-**GET** `/health/`
-
-```json
-{
-  "status": "ok",
-  "message": "Profile Integration API is running"
-}
-```
-
----
-
-## Natural Language Parsing
-
-Uses **rule-based pattern matching** (no AI/LLM).
-
-### Example Mappings
-
-| Query                    | Result                                   |
-| ------------------------ | ---------------------------------------- |
-| young males from nigeria | gender=male, age 16–24, country=NG       |
-| females above 30         | gender=female, min_age=30                |
-| adult males from kenya   | gender=male, age_group=adult, country=KE |
-
-### Limitations
-
-- No AND/OR logic
-- No negation
-- Single country detection
-- No typo correction
-- Limited keyword mapping
-
----
-
-## Error Format
+Missing version header response:
 
 ```json
 {
   "status": "error",
-  "message": "Error message"
+  "message": "API version header required"
 }
 ```
 
-| Code | Meaning            |
-| ---- | ------------------ |
-| 400  | Bad request        |
-| 404  | Not found          |
-| 422  | Invalid query      |
-| 500  | Server error       |
-| 502  | External API error |
+## Profile API
 
----
+Base path: `/api/profiles/`
 
-## Installation
+Required header:
 
-### Prerequisites
-
-- Python 3.11+
-- PostgreSQL
-
----
-
-### 1. Clone Project
-
-```bash
-git clone <repository-url>
-cd Profile-Integration
+```http
+X-API-Version: 1
 ```
 
----
+Endpoints:
 
-### 2. Create Virtual Environment
+| Method | Endpoint | Role | Description |
+| --- | --- | --- | --- |
+| `GET` | `/api/profiles/` | analyst/admin | List profiles with filters, sorting, and pagination |
+| `POST` | `/api/profiles/` | admin | Create a profile from a name |
+| `GET` | `/api/profiles/{id}/` | authenticated | Retrieve one profile |
+| `DELETE` | `/api/profiles/{id}/` | admin | Delete one profile |
+| `GET` | `/api/profiles/search/?q=young males from nigeria` | analyst/admin | Natural language search |
+| `GET` | `/api/profiles/export/?format=csv` | admin | Export filtered profiles as CSV |
+
+Pagination response shape:
+
+```json
+{
+  "status": "success",
+  "page": 1,
+  "limit": 10,
+  "total": 2026,
+  "total_pages": 203,
+  "links": {
+    "self": "/api/profiles/?page=1&limit=10",
+    "next": "/api/profiles/?page=2&limit=10",
+    "prev": null
+  },
+  "data": []
+}
+```
+
+Supported filters:
+
+- `gender`
+- `age_group`
+- `country` or `country_id`
+- `min_age`
+- `max_age`
+- `min_gender_probability`
+- `min_country_probability`
+- `sort_by=age|created_at|gender_probability`
+- `order=asc|desc`
+
+## Natural Language Parsing
+
+Natural language search is rule-based, not LLM-based. The parser maps phrases into structured filters.
+
+Examples:
+
+| Query | Filters |
+| --- | --- |
+| `young males from nigeria` | `gender=male`, `min_age=16`, `max_age=24`, `country_id=NG` |
+| `females above 30` | `gender=female`, `min_age=30` |
+| `adult males from kenya` | `gender=male`, `age_group=adult`, `country_id=KE` |
+
+## Rate Limiting and Logging
+
+- Auth scope target: 10 requests per minute.
+- Authenticated API users: 60 requests per minute.
+- Each request is logged with method, endpoint, user id, status code, and response time.
+
+## Local Setup
 
 ```bash
 python -m venv venv
-```
-
-**Activate**
-
-```bash
-# Windows
 venv\Scripts\activate
-
-# Mac/Linux
-source venv/bin/activate
-```
-
----
-
-### 3. Install Dependencies
-
-```bash
 pip install -r requirements.txt
-```
-
----
-
-### 4. Install Required Packages (if no requirements.txt yet)
-
-```bash
-pip install django djangorestframework psycopg2-binary requests drf-yasg django-cors-headers python-dotenv gunicorn
-```
-
----
-
-### 5. Setup Environment Variables
-
-```bash
-cp .env.example .env
-```
-
-Example `.env`:
-
-```
-DB_NAME=mnc_db
-DB_USER=postgres
-DB_PASSWORD=yourpassword
-DB_HOST=localhost
-DB_PORT=5432
-
-SECRET_KEY=your_secret_key
-DEBUG=True
-```
-
----
-
-### 6. Run Migrations
-
-```bash
 python manage.py migrate
-```
-
----
-
-### 7. Seed Database (Optional)
-
-```bash
-python manage.py seed_profiles --source sample
-```
-
----
-
-### 8. Run Server
-
-```bash
 python manage.py runserver
 ```
 
----
+Environment variables:
 
-## Docker (Optional)
-
-```bash
-docker compose up --build
+```env
+SECRET_KEY=replace-me
+DEBUG=True
+DATABASE_URL=postgres://user:password@host:5432/dbname
+FRONTEND_URL=http://localhost:3000
+GITHUB_CLIENT_ID=replace-me
+GITHUB_CLIENT_SECRET=replace-me
+GITHUB_CLI_CLIENT_ID=replace-me
+GITHUB_CLI_CLIENT_SECRET=replace-me
 ```
 
----
+If `DATABASE_URL` is omitted, the app uses local SQLite. Production should use PostgreSQL.
 
-## Deployment
+## CI/CD
 
-```
-https://rofile--ntegration-adewumijosephine3516-kodp7ruz.leapcell.dev
-```
+GitHub Actions workflow: `.github/workflows/ci.yml`
 
----
+Runs on pull requests and pushes to `main`:
 
-## API Docs
+- Install Python dependencies.
+- Run `python manage.py check`.
+- Run `python manage.py test`.
 
-```
-/api/docs/
-```
+## Engineering Standards
 
----
-
-## Testing
-
-```bash
-curl.exe "https://your-api.com/api/profiles/?gender=male&page=1&limit=10"
-
-curl.exe "https://your-api.com/api/profiles/search/?q=young%20males%20from%20nigeria"
-
-Invoke-RestMethod -Uri "https://your-api.com/api/profiles/" -Method POST -ContentType "application/json" -Body '{"name":"testuser"}'
-```
-
----
-
-## Tech Stack
-
-- Django
-- Django REST Framework
-- PostgreSQL
-- drf-yasg
-- Gunicorn
-- Requests
-- django-cors-headers
-
----
-
-## Author
-
-Backend Wizard - Josseycodes
-
----
-
-## License
-
-Good — this is the part that usually decides whether you get a “decent build” or a “high-scoring system design”.
-
-We’ll make this **README-ready architecture diagram** (clean, grader-friendly, not decorative nonsense).
-
----
-
-# 🧠 SYSTEM ARCHITECTURE (INSIGHTA LABS+)
-
-You should paste this directly into your README.
-
----
-
-## 🏗️ High-Level Architecture
-
-```text
-                    ┌────────────────────────────┐
-                    │        CLI CLIENT          │
-                    │ ~/.insighta/credentials    │
-                    └────────────┬───────────────┘
-                                 │ JWT (Bearer)
-                                 ▼
-                    ┌────────────────────────────┐
-                    │        DJANGO API          │
-                    │  (REST + Versioned API)    │
-                    └────────────┬───────────────┘
-                                 │
-        ┌────────────────────────┼────────────────────────┐
-        │                        │                        │
-        ▼                        ▼                        ▼
-┌───────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│ AUTH SYSTEM   │     │ PROFILE SYSTEM   │     │ ANALYTICS/LAYER  │
-│ - GitHub OAuth│     │ - CRUD Profiles  │     │ - Filtering      │
-│ - JWT (15min) │     │ - Search Engine  │     │ - Sorting        │
-│ - Refresh     │     │ - CSV Export     │     │ - Pagination     │
-└──────┬────────┘     └────────┬─────────┘     └────────┬─────────┘
-       │                       │                        │
-       ▼                       ▼                        ▼
-┌────────────────────────────────────────────────────────────┐
-│                PERMISSION LAYER (RBAC)                     │
-│        IsAuthenticated | IsAdmin | IsAnalyst              │
-└────────────────────────────────────────────────────────────┘
-                                 │
-                                 ▼
-                    ┌────────────────────────────┐
-                    │   DATABASE LAYER           │
-                    │ PostgreSQL (Leapcell)      │
-                    └────────────────────────────┘
-```
-
----
-
-# 🌐 WEB PORTAL FLOW (COOKIE AUTH)
-
-```text
-Browser (React / Web Portal)
-        │
-        │ Login Request
-        ▼
-Django Auth Endpoint
-        │
-        ├── GitHub OAuth (optional login)
-        │
-        ▼
-JWT Generated
-        │
-        ▼
-HTTP-only Cookies Set
-(access_token, refresh_token)
-        │
-        ▼
-Subsequent Requests
-(no JS token access)
-        │
-        ▼
-DRF Cookie Authentication
-        │
-        ▼
-Protected API Endpoints
-```
-
----
-
-# 💻 CLI FLOW (SEPARATE SECURITY MODEL)
-
-```text
-CLI Tool (Python)
-        │
-        ▼
-Login Command
-        │
-        ▼
-Backend Auth Endpoint
-        │
-        ▼
-JWT Access + Refresh Token
-        │
-        ▼
-~/.insighta/credentials.json
-        │
-        ▼
-API Requests
-Authorization: Bearer <token>
-```
-
----
-
-# 🔐 SECURITY LAYERS
-
-```text
-1. Authentication Layer
-   - GitHub OAuth (social login)
-   - JWT (access + refresh tokens)
-
-2. Authorization Layer (RBAC)
-   - IsAdmin → full system access
-   - IsAnalyst → read + limited write
-
-3. Transport Security
-   - HTTPS (production)
-   - CORS controlled
-
-4. Client Security
-   - CLI: local encrypted storage (JSON file)
-   - Web: HTTP-only cookies (no JS access)
-
-5. Abuse Protection
-   - DRF throttling (per scope)
-   - Pagination limits
-```
-
----
-
-# 📊 API VERSIONING STRUCTURE (YOU ALREADY HAVE IT RIGHT)
-
-```text
-/api/v1/auth/
-/api/v1/profiles/
-/api/v1/search/
-```
-
-✔ This ensures:
-
-- backward compatibility
-- clean upgrade path
-- grader expects this explicitly
-
----
-
-## System Design Summary
-
-- Django REST backend with versioned API (v1)
-- PostgreSQL hosted on Leapcell
-- JWT authentication for CLI
-- HTTP-only cookie authentication for web portal
-- GitHub OAuth via django-allauth
-- Role-based access control (admin / analyst)
-- Rate limiting via DRF throttles
-- CSV export for admin users
-- Natural language query parsing for profiles
+- Use conventional commits, for example `feat(auth): add github oauth`.
+- Create feature branches before opening PRs to `main`.
+- All merges to `main` should pass CI.

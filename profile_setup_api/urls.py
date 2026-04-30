@@ -11,5 +11,6 @@ urlpatterns = [
     path('profiles/search/', NaturalLanguageSearchView.as_view(), name='natural-search'),
     path('profiles/search', NaturalLanguageSearchView.as_view(), name='natural-search-no-slash'),
     path('v1/auth/github/', GitHubLogin.as_view(), name='github_login'),
-    path('profiles/export/csv/', ProfileCSVExportView.as_view()),
+    path('profiles/export/', ProfileCSVExportView.as_view(), name='profiles-export'),
+    path('profiles/export/csv/', ProfileCSVExportView.as_view(), name='profiles-export-csv'),
 ]
