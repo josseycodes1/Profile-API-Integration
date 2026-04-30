@@ -9,6 +9,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+from accounts.auth_views import GitHubCallbackRedirectView
+
 # Updated Swagger configuration with Bearer token support
 schema_view = get_schema_view(
     openapi.Info(
@@ -39,4 +41,7 @@ urlpatterns = [
     
     path('api/v1/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
+    path('accounts/', include('allauth.urls')),
+    path('github/callback/', GitHubCallbackRedirectView.as_view(), name='github_callback_redirect'),
 ]

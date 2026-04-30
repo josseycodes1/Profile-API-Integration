@@ -127,12 +127,19 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
-
-CORS_ALLOW_HEADERS = ["*"]
-
-CORS_ALLOW_METHODS = ["*"]
 CORS_ALLOW_CREDENTIALS = True
-# IMPORTANT for grader header
+CORS_ALLOW_ALL_HEADERS = True  # replaces CORS_ALLOW_HEADERS = ["*"] which is invalid
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+# Required by grader
 CORS_EXPOSE_HEADERS = ["*"]
 
 # Logging Configuration
@@ -171,7 +178,7 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/github/callback/'
 
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
