@@ -128,7 +128,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_HEADERS = True  # replaces CORS_ALLOW_HEADERS = ["*"] which is invalid
+CORS_ALLOW_ALL_HEADERS = True 
 
 CORS_ALLOW_METHODS = [
     "DELETE",

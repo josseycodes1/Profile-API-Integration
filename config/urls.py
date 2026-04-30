@@ -4,14 +4,9 @@ from django.http import JsonResponse
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from accounts.auth_views import GitHubCallbackRedirectView, GitHubCLIExchangeView
 
-from accounts.auth_views import GitHubCallbackRedirectView
-
-# Updated Swagger configuration with Bearer token support
 schema_view = get_schema_view(
     openapi.Info(
         title="Profile Integration API",
@@ -23,7 +18,6 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
-    # Add security definitions for Swagger
     authentication_classes=[],
 )
 
@@ -33,15 +27,19 @@ def health_check(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('health/', health_check, name='health-check'),
-    path('accounts/', include('allauth.urls')),
+    path('accounts/', include('allauth.urls')),          # allauth (once, not twice)
+    path('github/callback/', GitHubCallbackRedirectView.as_view(), name='github_callback_redirect'),
+
+    # Auth endpoints
     path('api/v1/auth/', include('dj_rest_auth.urls')),
-    path('api/', include('profile_setup_api.urls')),
-    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    
     path('api/v1/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
-    path('accounts/', include('allauth.urls')),
-    path('github/callback/', GitHubCallbackRedirectView.as_view(), name='github_callback_redirect'),
+    path('api/v1/auth/github/cli/', GitHubCLIExchangeView.as_view(), name='github_cli_exchange'),
+
+    # Profile API
+    path('api/', include('profile_setup_api.urls')),
+
+    # Docs
+    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
