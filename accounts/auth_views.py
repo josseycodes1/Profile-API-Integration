@@ -14,7 +14,7 @@ import base64
 import secrets
 import logging
 import requests
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -30,7 +30,7 @@ from profile_setup_api.throttles import AuthThrottle
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "https://insighta-web-azure.vercel.app/")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://insighta-web-azure.vercel.app/").rstrip("/")
 CLI_CALLBACK_URL = "http://localhost:9876/callback"
 GITHUB_WEB_CALLBACK_URL = os.getenv(
     "GITHUB_WEB_CALLBACK_URL",
@@ -40,6 +40,86 @@ GITHUB_AUTHORIZE_URL = "https://github.com/login/oauth/authorize"
 GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token"
 GITHUB_USER_URL = "https://api.github.com/user"
 GITHUB_EMAILS_URL = "https://api.github.com/user/emails"
+
+
+def _frontend_origins():
+    origins = {"http://localhost:3000", "http://127.0.0.1:3000"}
+    if FRONTEND_URL:
+        parsed = urlparse(FRONTEND_URL)
+        if parsed.scheme and parsed.netloc:
+            origins.add(f"{parsed.scheme}://{parsed.netloc}")
+    return origins
+
+
+def _is_web_client(request):
+    if request.headers.get("X-Client-Type", "").lower() == "cli":
+        return False
+    if request.query_params.get("client") == "cli":
+        return False
+
+    data = getattr(request, "data", None)
+    if hasattr(data, "get") and str(data.get("client", "")).lower() == "cli":
+        return False
+
+    origin = request.headers.get("Origin")
+    if origin and origin in _frontend_origins():
+        return True
+
+    referer = request.headers.get("Referer")
+    if referer:
+        parsed = urlparse(referer)
+        if parsed.scheme and parsed.netloc:
+            referer_origin = f"{parsed.scheme}://{parsed.netloc}"
+            if referer_origin in _frontend_origins():
+                return True
+
+    return False
+
+
+def _cookie_options(request, max_age):
+    host = request.get_host().split(":")[0]
+    is_local = host in {"localhost", "127.0.0.1"}
+    cookie_domain = os.getenv("FRONTEND_URL", "").strip() or None
+
+    if is_local and settings.DEBUG:
+        options = {
+            "max_age": max_age,
+            "httponly": True,
+            "secure": False,
+            "samesite": "Lax",
+            "path": "/",
+        }
+        if cookie_domain:
+            options["domain"] = cookie_domain
+        return options
+
+    options = {
+        "max_age": max_age,
+        "httponly": True,
+        "secure": True,
+        "samesite": "None",
+        "path": "/",
+    }
+    if cookie_domain:
+        options["domain"] = cookie_domain
+    return options
+
+
+def _oauth_cookie_options(request):
+    host = request.get_host().split(":")[0]
+    is_local = host in {"localhost", "127.0.0.1"}
+    cookie_domain = os.getenv("AUTH_COOKIE_DOMAIN", "").strip() or None
+
+    options = {
+        "max_age": 5 * 60,
+        "httponly": True,
+        "secure": not is_local,
+        "samesite": "Lax",
+        "path": "/",
+    }
+    if cookie_domain:
+        options["domain"] = cookie_domain
+    return options
 
 
 def _base64url_sha256(value: str) -> str:
@@ -71,23 +151,62 @@ def _token_payload(user):
     }
 
 
-def _set_token_cookies(response, payload):
+def _public_auth_payload(payload):
+    return {
+        "status": payload["status"],
+        "user": payload["user"],
+        "role": payload["role"],
+        "email": payload["email"],
+    }
+
+
+def _set_token_cookies(request, response, payload):
     response.set_cookie(
         "access_token",
         payload["access_token"],
-        max_age=3 * 60,
-        httponly=True,
-        secure=True,      
-        samesite="None",
+        **_cookie_options(request, 3 * 60),
     )
     response.set_cookie(
         "refresh_token",
         payload["refresh_token"],
-        max_age=5 * 60,
-        httponly=True,
-        secure=True,
-        samesite="None",
+        **_cookie_options(request, 5 * 60),
     )
+
+
+def _clear_token_cookies(request, response):
+    cookie_options = _cookie_options(request, 0)
+    delete_options = {
+        "path": cookie_options["path"],
+        "samesite": cookie_options["samesite"],
+    }
+    if "domain" in cookie_options:
+        delete_options["domain"] = cookie_options["domain"]
+
+    response.delete_cookie("access_token", **delete_options)
+    response.delete_cookie("refresh_token", **delete_options)
+
+
+def _clear_oauth_cookies(request, response):
+    cookie_options = _oauth_cookie_options(request)
+    delete_options = {
+        "path": cookie_options["path"],
+        "samesite": cookie_options["samesite"],
+    }
+    if "domain" in cookie_options:
+        delete_options["domain"] = cookie_options["domain"]
+
+    response.delete_cookie("oauth_state", **delete_options)
+    response.delete_cookie("code_verifier", **delete_options)
+    response.delete_cookie("code_challenge", **delete_options)
+
+
+def _build_auth_response(request, payload):
+    if _is_web_client(request):
+        response = Response(_public_auth_payload(payload))
+        _set_token_cookies(request, response, payload)
+        return response
+
+    return Response(payload)
 
 
 def _github_request_json(method, url, **kwargs):
@@ -173,7 +292,7 @@ class GitHubOAuthStartView(APIView):
         state = secrets.token_urlsafe(32)
         code_verifier = secrets.token_urlsafe(64)
         code_challenge = _base64url_sha256(code_verifier)
-        callback_url = os.getenv("GITHUB_WEB_CALLBACK_URL") or request.build_absolute_uri("/auth/github/callback")
+        callback_url = GITHUB_WEB_CALLBACK_URL or request.build_absolute_uri("/auth/github/callback")
         auth_params = {
             'client_id': client_id,
             'redirect_uri': callback_url,
@@ -185,12 +304,7 @@ class GitHubOAuthStartView(APIView):
         auth_url = f"{GITHUB_AUTHORIZE_URL}?{urlencode(auth_params)}"
 
         response = redirect(auth_url)
-        cookie_kwargs = {
-            "max_age": 5 * 60,
-            "httponly": True,
-            "secure": not settings.DEBUG,
-            "samesite": "Lax",
-        }
+        cookie_kwargs = _oauth_cookie_options(request)
         response.set_cookie("oauth_state", state, **cookie_kwargs)
         response.set_cookie("code_verifier", code_verifier, **cookie_kwargs)
         response.set_cookie("code_challenge", code_challenge, **cookie_kwargs)
@@ -233,7 +347,7 @@ class GitHubOAuthCallbackView(APIView):
                     "client_id": os.getenv("GITHUB_CLIENT_ID"),
                     "client_secret": os.getenv("GITHUB_CLIENT_SECRET"),
                     "code": code,
-                    "redirect_uri": os.getenv("GITHUB_WEB_CALLBACK_URL") or request.build_absolute_uri("/auth/github/callback"),
+                    "redirect_uri": GITHUB_WEB_CALLBACK_URL or request.build_absolute_uri("/auth/github/callback"),
                     "code_verifier": code_verifier,
                 },
             )
@@ -271,12 +385,21 @@ class GitHubOAuthCallbackView(APIView):
 
         # Tokens are delivered ONLY via httpOnly cookies — never in the redirect
         # URL. This keeps them out of browser history, server logs, and JS.
-        response = redirect(f"{FRONTEND_URL.rstrip('/')}/auth/callback")
-        _set_token_cookies(response, payload)
-        response.delete_cookie("oauth_state")
-        response.delete_cookie("code_verifier")
-        response.delete_cookie("code_challenge")
+        response = redirect(f"{FRONTEND_URL}/auth/callback")
+        _set_token_cookies(request, response, payload)
+        _clear_oauth_cookies(request, response)
         return response
+
+
+class GitHubOnlyLoginView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def post(self, request):
+        return Response(
+            {"status": "error", "message": "Password login is disabled. Use GitHub OAuth."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
 
 
 class RefreshTokenView(APIView):
@@ -313,9 +436,7 @@ class RefreshTokenView(APIView):
             )
 
         payload = _token_payload(user)
-        response = Response(payload)
-        _set_token_cookies(response, payload)
-        return response
+        return _build_auth_response(request, payload)
 
 
 class LogoutTokenView(APIView):
@@ -336,8 +457,7 @@ class LogoutTokenView(APIView):
                 pass
 
         response = Response({"status": "success", "message": "Logged out"})
-        response.delete_cookie("access_token")
-        response.delete_cookie("refresh_token")
+        _clear_token_cookies(request, response)
         return response
 
 
@@ -421,8 +541,8 @@ class GitHubLogin(SocialLoginView):
 
         # Tokens in cookies only — no query params in redirect URL
         payload = _token_payload(user)
-        response = redirect(f"{FRONTEND_URL.rstrip('/')}/auth/callback")
-        _set_token_cookies(response, payload)
+        response = redirect(f"{FRONTEND_URL}/auth/callback")
+        _set_token_cookies(request, response, payload)
         return response
 
 
@@ -442,8 +562,8 @@ class GitHubCallbackRedirectView(View):
         payload = _token_payload(user)
 
         # Tokens in cookies only — no query params in redirect URL
-        response = redirect(f"{FRONTEND_URL.rstrip('/')}/auth/callback")
-        _set_token_cookies(response, payload)
+        response = redirect(f"{FRONTEND_URL}/auth/callback")
+        _set_token_cookies(request, response, payload)
         return response
 
 

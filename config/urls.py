@@ -9,6 +9,7 @@ from accounts.auth_views import (
     CurrentUserView,
     GitHubCallbackRedirectView,
     GitHubCLIExchangeView,
+    GitHubOnlyLoginView,
     GitHubOAuthCallbackView,
     GitHubOAuthStartView,
     LogoutTokenView,
@@ -51,6 +52,7 @@ urlpatterns = [
     path('api/users/me/', CurrentUserView.as_view(), name='users_me_slash'),
 
     # Auth endpoints
+    path('api/v1/auth/login/', GitHubOnlyLoginView.as_view(), name='auth_login_disabled'),
     path('api/v1/auth/', include('dj_rest_auth.urls')),
     path('api/v1/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
