@@ -79,7 +79,7 @@ def _is_web_client(request):
 def _cookie_options(request, max_age):
     host = request.get_host().split(":")[0]
     is_local = host in {"localhost", "127.0.0.1"}
-    cookie_domain = os.getenv("AUTH_COOKIE_DOMAIN", "").strip() or None
+    cookie_domain = os.getenv("FRONTEND_URL", "").strip() or None
 
     if is_local and settings.DEBUG:
         options = {
