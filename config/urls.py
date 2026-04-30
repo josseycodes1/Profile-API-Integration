@@ -5,7 +5,15 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from accounts.auth_views import GitHubCallbackRedirectView, GitHubCLIExchangeView
+from accounts.auth_views import (
+    CurrentUserView,
+    GitHubCallbackRedirectView,
+    GitHubCLIExchangeView,
+    GitHubOAuthCallbackView,
+    GitHubOAuthStartView,
+    LogoutTokenView,
+    RefreshTokenView,
+)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -29,6 +37,18 @@ urlpatterns = [
     path('health/', health_check, name='health-check'),
     path('accounts/', include('allauth.urls')),          # allauth (once, not twice)
     path('github/callback/', GitHubCallbackRedirectView.as_view(), name='github_callback_redirect'),
+
+    # TRD-compatible auth endpoints
+    path('auth/github', GitHubOAuthStartView.as_view(), name='auth_github'),
+    path('auth/github/', GitHubOAuthStartView.as_view(), name='auth_github_slash'),
+    path('auth/github/callback', GitHubOAuthCallbackView.as_view(), name='auth_github_callback'),
+    path('auth/github/callback/', GitHubOAuthCallbackView.as_view(), name='auth_github_callback_slash'),
+    path('auth/refresh', RefreshTokenView.as_view(), name='auth_refresh'),
+    path('auth/refresh/', RefreshTokenView.as_view(), name='auth_refresh_slash'),
+    path('auth/logout', LogoutTokenView.as_view(), name='auth_logout'),
+    path('auth/logout/', LogoutTokenView.as_view(), name='auth_logout_slash'),
+    path('api/users/me', CurrentUserView.as_view(), name='users_me'),
+    path('api/users/me/', CurrentUserView.as_view(), name='users_me_slash'),
 
     # Auth endpoints
     path('api/v1/auth/', include('dj_rest_auth.urls')),

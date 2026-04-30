@@ -37,10 +37,12 @@ The platform supports GitHub OAuth for browser users and a CLI OAuth exchange fo
 Web flow:
 
 1. User clicks "Continue with GitHub".
-2. Django/allauth completes the GitHub OAuth callback.
-3. The backend creates or retrieves the user.
-4. JWT access and refresh tokens are issued.
-5. Web sessions use HTTP-only cookies where available.
+2. Browser opens `GET /auth/github`.
+3. Backend generates `state`, `code_verifier`, and `code_challenge`.
+4. Backend stores `oauth_state` and `code_verifier` in HttpOnly cookies.
+5. Backend redirects to GitHub with PKCE and state.
+6. GitHub redirects to `GET /auth/github/callback`.
+7. Backend validates state and PKCE, creates or retrieves the user, issues tokens, and sets HttpOnly token cookies.
 
 CLI flow:
 
@@ -57,6 +59,16 @@ CLI flow:
 - Refresh tokens rotate on refresh.
 - Old refresh tokens are blacklisted after rotation.
 - CLI credentials are stored locally at `~/.insighta/credentials.json`.
+
+Auth endpoints:
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/auth/github` | Start GitHub OAuth with PKCE and state |
+| `GET` | `/auth/github/callback` | Validate OAuth callback and issue tokens |
+| `POST` | `/auth/refresh` | Rotate refresh token and issue a new token pair |
+| `POST` | `/auth/logout` | Blacklist refresh token and clear auth cookies |
+| `GET` | `/api/users/me` | Return the authenticated user |
 
 ## Role Enforcement
 

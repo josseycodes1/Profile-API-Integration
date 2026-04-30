@@ -4,26 +4,355 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 from django.views import View
 from django.contrib.auth import get_user_model
+from django.conf import settings
 import os
 import hashlib
 import base64
+import secrets
 import logging
 import requests
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
+from profile_setup_api.throttles import AuthThrottle
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://insighta-web-azure.vercel.app/")
 CLI_CALLBACK_URL = "http://localhost:9876/callback"
+GITHUB_AUTHORIZE_URL = "https://github.com/login/oauth/authorize"
+GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token"
+GITHUB_USER_URL = "https://api.github.com/user"
+GITHUB_EMAILS_URL = "https://api.github.com/user/emails"
+
+
+def _base64url_sha256(value: str) -> str:
+    digest = hashlib.sha256(value.encode("ascii")).digest()
+    return base64.urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")
+
+
+def _token_payload(user):
+    refresh = RefreshToken.for_user(user)
+    refresh["role"] = user.role
+    refresh["email"] = user.email
+    return {
+        "status": "success",
+        "access_token": str(refresh.access_token),
+        "refresh_token": str(refresh),
+        "access": str(refresh.access_token),
+        "refresh": str(refresh),
+        "user": {
+            "id": str(user.id),
+            "github_id": user.github_id,
+            "username": user.username,
+            "email": user.email,
+            "avatar_url": user.avatar_url,
+            "role": user.role,
+            "is_active": user.is_active,
+        },
+        "role": user.role,
+        "email": user.email,
+    }
+
+
+def _set_token_cookies(response, payload):
+    response.set_cookie(
+        "access_token",
+        payload["access_token"],
+        max_age=3 * 60,
+        httponly=True,
+        secure=not settings.DEBUG,
+        samesite="Lax",
+    )
+    response.set_cookie(
+        "refresh_token",
+        payload["refresh_token"],
+        max_age=5 * 60,
+        httponly=True,
+        secure=not settings.DEBUG,
+        samesite="Lax",
+    )
+
+
+def _github_request_json(method, url, **kwargs):
+    try:
+        response = requests.request(method, url, timeout=10, **kwargs)
+        return response.json()
+    except requests.RequestException as exc:
+        raise RuntimeError(str(exc)) from exc
+
+
+def _get_or_create_github_user(github_access_token):
+    github_user = _github_request_json(
+        "GET",
+        GITHUB_USER_URL,
+        headers={
+            "Authorization": f"Bearer {github_access_token}",
+            "Accept": "application/vnd.github+json",
+        },
+    )
+
+    github_id = str(github_user.get("id") or "")
+    username = github_user.get("login") or ""
+    email = github_user.get("email")
+
+    if not email:
+        emails = _github_request_json(
+            "GET",
+            GITHUB_EMAILS_URL,
+            headers={
+                "Authorization": f"Bearer {github_access_token}",
+                "Accept": "application/vnd.github+json",
+            },
+        )
+        primary = next(
+            (item for item in emails if item.get("primary") and item.get("verified")),
+            None,
+        )
+        email = primary["email"] if primary else None
+
+    if not github_id or not email:
+        raise ValueError("Could not retrieve GitHub id and verified email")
+
+    user = User.objects.filter(github_id=github_id).first()
+    if not user:
+        user = User.objects.filter(email=email).first()
+
+    if not user:
+        base_username = username or email.split("@")[0]
+        candidate = base_username
+        counter = 1
+        while User.objects.filter(username=candidate).exists():
+            candidate = f"{base_username}{counter}"
+            counter += 1
+        user = User.objects.create_user(
+            email=email,
+            username=candidate,
+            password=None,
+        )
+
+    user.github_id = github_id
+    user.username = user.username or username
+    user.avatar_url = github_user.get("avatar_url") or user.avatar_url
+    user.last_login_at = timezone.now()
+    if not user.role:
+        user.role = "analyst"
+    user.save()
+    return user
+
+
+class GitHubOAuthStartView(APIView):
+    authentication_classes = []
+    permission_classes = []
+    throttle_classes = [AuthThrottle]
+
+    def get(self, request):
+        client_id = os.getenv("GITHUB_CLIENT_ID")
+        if not client_id:
+            return Response(
+                {"status": "error", "message": "GitHub OAuth is not configured"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        state = secrets.token_urlsafe(32)
+        code_verifier = secrets.token_urlsafe(64)
+        code_challenge = _base64url_sha256(code_verifier)
+        callback_url = request.build_absolute_uri("/auth/github/callback")
+
+        auth_url = (
+            f"{GITHUB_AUTHORIZE_URL}"
+            f"?client_id={client_id}"
+            f"&redirect_uri={callback_url}"
+            f"&scope=user:email"
+            f"&state={state}"
+            f"&code_challenge={code_challenge}"
+            f"&code_challenge_method=S256"
+        )
+
+        response = redirect(auth_url)
+        cookie_kwargs = {
+            "max_age": 5 * 60,
+            "httponly": True,
+            "secure": not settings.DEBUG,
+            "samesite": "Lax",
+        }
+        response.set_cookie("oauth_state", state, **cookie_kwargs)
+        response.set_cookie("code_verifier", code_verifier, **cookie_kwargs)
+        response.set_cookie("code_challenge", code_challenge, **cookie_kwargs)
+        return response
+
+
+class GitHubOAuthCallbackView(APIView):
+    authentication_classes = []
+    permission_classes = []
+    throttle_classes = [AuthThrottle]
+
+    def get(self, request):
+        code = request.query_params.get("code")
+        state = request.query_params.get("state")
+        saved_state = request.COOKIES.get("oauth_state")
+        code_verifier = request.COOKIES.get("code_verifier")
+
+        if not code or not state:
+            return Response(
+                {"status": "error", "message": "Missing OAuth code or state"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not saved_state or state != saved_state:
+            return Response(
+                {"status": "error", "message": "Invalid OAuth state"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not code_verifier:
+            return Response(
+                {"status": "error", "message": "Missing PKCE code verifier"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            token_data = _github_request_json(
+                "POST",
+                GITHUB_TOKEN_URL,
+                headers={"Accept": "application/json"},
+                json={
+                    "client_id": os.getenv("GITHUB_CLIENT_ID"),
+                    "client_secret": os.getenv("GITHUB_CLIENT_SECRET"),
+                    "code": code,
+                    "redirect_uri": request.build_absolute_uri("/auth/github/callback"),
+                    "code_verifier": code_verifier,
+                },
+            )
+        except RuntimeError as exc:
+            return Response(
+                {"status": "error", "message": str(exc)},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
+        github_access_token = token_data.get("access_token")
+        if not github_access_token:
+            return Response(
+                {
+                    "status": "error",
+                    "message": token_data.get("error_description", "GitHub token exchange failed"),
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            user = _get_or_create_github_user(github_access_token)
+        except (RuntimeError, ValueError) as exc:
+            return Response(
+                {"status": "error", "message": str(exc)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not user.is_active:
+            return Response(
+                {"status": "error", "message": "User account is inactive"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        payload = _token_payload(user)
+        response = redirect(
+            f"{FRONTEND_URL.rstrip('/')}/auth/callback"
+            f"?access={payload['access_token']}"
+            f"&refresh={payload['refresh_token']}"
+            f"&role={user.role}"
+        )
+        _set_token_cookies(response, payload)
+        response.delete_cookie("oauth_state")
+        response.delete_cookie("code_verifier")
+        response.delete_cookie("code_challenge")
+        return response
+
+
+class RefreshTokenView(APIView):
+    authentication_classes = []
+    permission_classes = []
+    throttle_classes = [AuthThrottle]
+
+    def post(self, request):
+        raw_refresh = (
+            request.data.get("refresh_token")
+            or request.data.get("refresh")
+            or request.COOKIES.get("refresh_token")
+        )
+        if not raw_refresh:
+            return Response(
+                {"status": "error", "message": "Refresh token required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            old_refresh = RefreshToken(raw_refresh)
+            user = User.objects.get(id=old_refresh["user_id"])
+            old_refresh.blacklist()
+        except (TokenError, User.DoesNotExist) as exc:
+            return Response(
+                {"status": "error", "message": "Invalid refresh token"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        if not user.is_active:
+            return Response(
+                {"status": "error", "message": "User account is inactive"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        payload = _token_payload(user)
+        response = Response(payload)
+        _set_token_cookies(response, payload)
+        return response
+
+
+class LogoutTokenView(APIView):
+    authentication_classes = []
+    permission_classes = []
+    throttle_classes = [AuthThrottle]
+
+    def post(self, request):
+        raw_refresh = request.data.get("refresh_token") or request.data.get("refresh") or request.COOKIES.get("refresh_token")
+        if raw_refresh:
+            try:
+                RefreshToken(raw_refresh).blacklist()
+            except TokenError:
+                pass
+
+        response = Response({"status": "success", "message": "Logged out"})
+        response.delete_cookie("access_token")
+        response.delete_cookie("refresh_token")
+        return response
+
+
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            "status": "success",
+            "data": {
+                "id": str(user.id),
+                "github_id": user.github_id,
+                "username": user.username,
+                "email": user.email,
+                "avatar_url": user.avatar_url,
+                "role": user.role,
+                "is_active": user.is_active,
+                "last_login_at": user.last_login_at,
+                "created_at": user.date_joined,
+            }
+        })
 
 
 # ─────────────────────────────────────────────────────────────────────────────
