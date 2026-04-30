@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+from urllib.parse import urlparse
 from dotenv import load_dotenv
 import dj_database_url
 from datetime import timedelta
@@ -20,6 +21,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-your-secret-key-here')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ["*"]
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000").rstrip("/")
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -56,8 +58,8 @@ REST_AUTH = {
 SITE_ID = 1
 
 MIDDLEWARE = [
-    'accounts.middleware.DynamicCORSMiddleware', 
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'accounts.middleware.RequestAuditMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -144,8 +146,22 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True  
+frontend_origin = None
+if FRONTEND_URL:
+    parsed_frontend = urlparse(FRONTEND_URL)
+    if parsed_frontend.scheme and parsed_frontend.netloc:
+        frontend_origin = f"{parsed_frontend.scheme}://{parsed_frontend.netloc}"
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+if frontend_origin and frontend_origin not in CORS_ALLOWED_ORIGINS:
+    CORS_ALLOWED_ORIGINS.append(frontend_origin)
+
+CSRF_TRUSTED_ORIGINS = [origin for origin in CORS_ALLOWED_ORIGINS if origin.startswith(("http://", "https://"))]
+
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = list(default_headers) + ["x-api-version"]
 CORS_ALLOW_METHODS = ["DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT"]
 CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
