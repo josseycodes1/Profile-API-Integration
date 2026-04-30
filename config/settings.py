@@ -56,7 +56,7 @@ REST_AUTH = {
 SITE_ID = 1
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'accounts.middleware.DynamicCORSMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'accounts.middleware.RequestAuditMiddleware',
