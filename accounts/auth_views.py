@@ -34,7 +34,7 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "https://insighta-web-azure.vercel.app/
 CLI_CALLBACK_URL = "http://localhost:9876/callback"
 GITHUB_WEB_CALLBACK_URL = os.getenv(
     "GITHUB_WEB_CALLBACK_URL",
-    "https://rofile--ntegration-adewumijosephine3516-kodp7ruz.leapcell.dev/auth/github/callback",
+    "NEXT_PUBLIC_API_URL=https://rofile--ntegration-queenjossey2882-3fiaqj4k.leapcell.dev",
 )
 GITHUB_AUTHORIZE_URL = "https://github.com/login/oauth/authorize"
 GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token"
@@ -368,7 +368,7 @@ class CurrentUserView(APIView):
 
 class GitHubLogin(SocialLoginView):
     adapter_class = GitHubOAuth2Adapter
-    callback_url = "https://rofile--ntegration-adewumijosephine3516-kodp7ruz.leapcell.dev/accounts/github/login/callback/"
+    callback_url = "https://rofile--ntegration-queenjossey2882-3fiaqj4k.leapcell.dev"
     client_class = OAuth2Client
 
     @swagger_auto_schema(
