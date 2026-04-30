@@ -174,14 +174,15 @@ class GitHubOAuthStartView(APIView):
         code_verifier = secrets.token_urlsafe(64)
         code_challenge = _base64url_sha256(code_verifier)
         callback_url = os.getenv("GITHUB_WEB_CALLBACK_URL") or request.build_absolute_uri("/auth/github/callback")
-        auth_url = f"{GITHUB_AUTHORIZE_URL}?{urlencode({
+        auth_params = {
             'client_id': client_id,
             'redirect_uri': callback_url,
             'scope': 'user:email',
             'state': state,
             'code_challenge': code_challenge,
             'code_challenge_method': 'S256',
-        })}"
+        }
+        auth_url = f"{GITHUB_AUTHORIZE_URL}?{urlencode(auth_params)}"
 
         response = redirect(auth_url)
         cookie_kwargs = {
