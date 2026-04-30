@@ -242,6 +242,7 @@ class GitHubOAuthCallbackView(APIView):
                 {"status": "error", "message": str(exc)},
                 status=status.HTTP_502_BAD_GATEWAY,
             )
+
         github_access_token = token_data.get("access_token")
         if not github_access_token:
             return Response(
@@ -267,12 +268,10 @@ class GitHubOAuthCallbackView(APIView):
             )
 
         payload = _token_payload(user)
-        response = redirect(
-            f"{FRONTEND_URL.rstrip('/')}/auth/callback"
-            f"?access={payload['access_token']}"
-            f"&refresh={payload['refresh_token']}"
-            f"&role={user.role}"
-        )
+
+        # Tokens are delivered ONLY via httpOnly cookies — never in the redirect
+        # URL. This keeps them out of browser history, server logs, and JS.
+        response = redirect(f"{FRONTEND_URL.rstrip('/')}/auth/callback")
         _set_token_cookies(response, payload)
         response.delete_cookie("oauth_state")
         response.delete_cookie("code_verifier")
@@ -301,7 +300,7 @@ class RefreshTokenView(APIView):
             old_refresh = RefreshToken(raw_refresh)
             user = User.objects.get(id=old_refresh["user_id"])
             old_refresh.blacklist()
-        except (TokenError, User.DoesNotExist) as exc:
+        except (TokenError, User.DoesNotExist):
             return Response(
                 {"status": "error", "message": "Invalid refresh token"},
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -325,7 +324,11 @@ class LogoutTokenView(APIView):
     throttle_classes = [AuthThrottle]
 
     def post(self, request):
-        raw_refresh = request.data.get("refresh_token") or request.data.get("refresh") or request.COOKIES.get("refresh_token")
+        raw_refresh = (
+            request.data.get("refresh_token")
+            or request.data.get("refresh")
+            or request.COOKIES.get("refresh_token")
+        )
         if raw_refresh:
             try:
                 RefreshToken(raw_refresh).blacklist()
@@ -416,13 +419,11 @@ class GitHubLogin(SocialLoginView):
                 }
             })
 
-        redirect_url = (
-            f"{FRONTEND_URL}/auth/callback"
-            f"?access={str(refresh.access_token)}"
-            f"&refresh={str(refresh)}"
-            f"&role={user.role}"
-        )
-        return redirect(redirect_url)
+        # Tokens in cookies only — no query params in redirect URL
+        payload = _token_payload(user)
+        response = redirect(f"{FRONTEND_URL.rstrip('/')}/auth/callback")
+        _set_token_cookies(response, payload)
+        return response
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -438,17 +439,12 @@ class GitHubCallbackRedirectView(View):
             user.role = "analyst"
             user.save()
 
-        refresh = RefreshToken.for_user(user)
-        refresh["role"] = user.role
-        refresh["email"] = user.email
+        payload = _token_payload(user)
 
-        redirect_url = (
-            f"{FRONTEND_URL}/auth/callback"
-            f"?access={str(refresh.access_token)}"
-            f"&refresh={str(refresh)}"
-            f"&role={user.role}"
-        )
-        return redirect(redirect_url)
+        # Tokens in cookies only — no query params in redirect URL
+        response = redirect(f"{FRONTEND_URL.rstrip('/')}/auth/callback")
+        _set_token_cookies(response, payload)
+        return response
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -468,7 +464,7 @@ class GitHubCLIExchangeView(APIView):
       6. Exchanges the code with GitHub for a GitHub access token
       7. Fetches the GitHub user profile + email
       8. Gets or creates the Django user
-      9. Returns JWT access + refresh tokens as JSON
+      9. Returns JWT access + refresh tokens as JSON (no cookies — CLI reads body)
 
     PKCE is enforced at our backend layer. Standard GitHub OAuth Apps do not
     accept code_verifier in the token exchange, so we verify it ourselves
@@ -482,7 +478,6 @@ class GitHubCLIExchangeView(APIView):
         code_verifier = request.data.get("code_verifier")
         code_challenge = request.data.get("code_challenge")  # optional extra check
 
-        # ── Basic validation ───────────────────────────────────────────────
         if not code:
             logger.warning("CLI exchange: missing code in request")
             return Response(
@@ -490,11 +485,6 @@ class GitHubCLIExchangeView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # ── PKCE verification ──────────────────────────────────────────────
-        # We verify PKCE ourselves since GitHub OAuth Apps don't natively
-        # accept code_verifier in token exchange (only GitHub Apps do).
-        # Security guarantee is identical: attacker without code_verifier
-        # cannot complete the flow even if they intercept the code.
         if code_verifier:
             digest = hashlib.sha256(code_verifier.encode("ascii")).digest()
             computed_challenge = base64.urlsafe_b64encode(digest).rstrip(b"=").decode()
@@ -503,7 +493,6 @@ class GitHubCLIExchangeView(APIView):
                 f"code_verifier present=True, length={len(code_verifier)}, "
                 f"computed_challenge={computed_challenge[:16]}..."
             )
-            # If the CLI also sends the original challenge, double-check it
             if code_challenge and computed_challenge != code_challenge:
                 logger.error("CLI exchange: PKCE challenge mismatch")
                 return Response(
@@ -513,7 +502,6 @@ class GitHubCLIExchangeView(APIView):
         else:
             logger.warning("CLI exchange: no code_verifier provided — PKCE skipped")
 
-        # ── Load CLI OAuth App credentials ────────────────────────────────
         client_id = os.getenv("GITHUB_CLI_CLIENT_ID")
         client_secret = os.getenv("GITHUB_CLI_CLIENT_SECRET")
 
@@ -526,9 +514,6 @@ class GitHubCLIExchangeView(APIView):
 
         logger.info(f"CLI exchange: exchanging code with GitHub (client_id={client_id[:8]}...)")
 
-        # ── Step 1: Exchange code for GitHub access token ──────────────────
-        # NOTE: We do NOT send code_verifier to GitHub here — standard GitHub
-        # OAuth Apps reject it. PKCE is verified above at our layer.
         try:
             token_res = requests.post(
                 "https://github.com/login/oauth/access_token",
@@ -564,7 +549,6 @@ class GitHubCLIExchangeView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # ── Step 2: Fetch GitHub user profile ─────────────────────────────
         try:
             user_res = requests.get(
                 "https://api.github.com/user",
@@ -582,7 +566,6 @@ class GitHubCLIExchangeView(APIView):
                 status=status.HTTP_502_BAD_GATEWAY
             )
 
-        # ── Step 3: Resolve primary verified email ─────────────────────────
         email = github_user.get("email")
 
         if not email:
@@ -612,7 +595,6 @@ class GitHubCLIExchangeView(APIView):
 
         logger.info(f"CLI exchange: resolved email={email}")
 
-        # ── Step 4: Get or create Django user ──────────────────────────────
         try:
             try:
                 user = User.objects.get(email=email)
@@ -642,12 +624,12 @@ class GitHubCLIExchangeView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-        # ── Step 5: Ensure role ────────────────────────────────────────────
         if not getattr(user, "role", None):
             user.role = "analyst"
             user.save()
 
-        # ── Step 6: Issue JWT tokens ───────────────────────────────────────
+        # CLI receives tokens in the JSON response body (not cookies).
+        # This is intentional — the CLI stores them in ~/.insighta/credentials.json.
         refresh = RefreshToken.for_user(user)
         refresh["role"] = user.role
         refresh["email"] = user.email
