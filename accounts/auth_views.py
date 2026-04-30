@@ -22,7 +22,7 @@ from drf_yasg import openapi
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://insighta-web-azure.vercel.app/")
 CLI_CALLBACK_URL = "http://localhost:9876/callback"
 
 
@@ -32,7 +32,7 @@ CLI_CALLBACK_URL = "http://localhost:9876/callback"
 
 class GitHubLogin(SocialLoginView):
     adapter_class = GitHubOAuth2Adapter
-    callback_url = "http://localhost:8000/accounts/github/login/callback/"
+    callback_url = "https://rofile--ntegration-adewumijosephine3516-kodp7ruz.leapcell.dev/accounts/github/login/callback/"
     client_class = OAuth2Client
 
     @swagger_auto_schema(
