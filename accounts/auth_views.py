@@ -77,16 +77,16 @@ def _set_token_cookies(response, payload):
         payload["access_token"],
         max_age=3 * 60,
         httponly=True,
-        secure=not settings.DEBUG,
-        samesite="Lax",
+        secure=True,      
+        samesite="None",
     )
     response.set_cookie(
         "refresh_token",
         payload["refresh_token"],
         max_age=5 * 60,
         httponly=True,
-        secure=not settings.DEBUG,
-        samesite="Lax",
+        secure=True,
+        samesite="None",
     )
 
 
