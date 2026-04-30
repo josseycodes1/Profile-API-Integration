@@ -145,20 +145,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = False
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    "x-api-version",
-]
-
-CORS_ALLOW_METHODS = [
-    "DELETE",
-    "GET",
-    "OPTIONS",
-    "PATCH",
-    "POST",
-    "PUT",
-]
+CORS_ALLOW_CREDENTIALS = True  
+CORS_ALLOW_HEADERS = list(default_headers) + ["x-api-version"]
+CORS_ALLOW_METHODS = ["DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT"]
+CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 
 # Required by grader
 CORS_EXPOSE_HEADERS = ["*"]
