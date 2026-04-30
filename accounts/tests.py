@@ -37,6 +37,33 @@ class Stage3AuthEndpointTests(TestCase):
         self.assertTrue(response.cookies["oauth_state"]["httponly"])
         self.assertTrue(response.cookies["code_verifier"]["httponly"])
 
+    @patch.dict("os.environ", {"GITHUB_CLIENT_ID": "test-client-id"}, clear=False)
+    def test_github_auth_redirect_uses_secure_pkce_cookies_for_non_local_hosts(self):
+        response = self.client.get(
+            "/auth/github",
+            HTTP_ORIGIN="https://insighta-web-azure.vercel.app",
+            HTTP_HOST="api.example.com",
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.cookies["oauth_state"]["secure"])
+        self.assertEqual(response.cookies["oauth_state"]["samesite"], "Lax")
+
+    @patch.dict(
+        "os.environ",
+        {"GITHUB_CLIENT_ID": "test-client-id", "AUTH_COOKIE_DOMAIN": ".example.com"},
+        clear=False,
+    )
+    def test_github_auth_redirect_applies_cookie_domain_when_configured(self):
+        response = self.client.get(
+            "/auth/github",
+            HTTP_ORIGIN="https://app.example.com",
+            HTTP_HOST="api.example.com",
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.cookies["oauth_state"]["domain"], ".example.com")
+
     @patch.dict("os.environ", {"GITHUB_CLIENT_ID": "test-client-id"})
     def test_github_auth_is_rate_limited(self):
         for _ in range(10):

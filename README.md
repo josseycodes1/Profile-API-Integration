@@ -176,12 +176,19 @@ SECRET_KEY=replace-me
 DEBUG=True
 DATABASE_URL=postgres://user:password@host:5432/dbname
 FRONTEND_URL=http://localhost:3000
+AUTH_COOKIE_DOMAIN=
 GITHUB_CLIENT_ID=replace-me
 GITHUB_CLIENT_SECRET=replace-me
 GITHUB_WEB_CALLBACK_URL=https://your-backend.example.com/auth/github/callback
 GITHUB_CLI_CLIENT_ID=replace-me
 GITHUB_CLI_CLIENT_SECRET=replace-me
 ```
+
+Cookie-based web auth works best when the frontend and API share the same parent
+site, for example `app.example.com` and `api.example.com`. If you deploy the
+frontend and API on unrelated domains, the backend cookies will belong to the
+API domain only and must be sent back to the API with `credentials: "include"`.
+They will not appear as frontend-domain cookies.
 
 If `DATABASE_URL` is omitted, the app uses local SQLite. Production should use PostgreSQL.
 
