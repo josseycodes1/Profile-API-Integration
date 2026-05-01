@@ -25,7 +25,6 @@ class CookieLoginView(APIView):
             "role": getattr(user, "role", "analyst")
         })
 
-        # 🔥 HTTP-only cookies
         response.set_cookie(
             key="access_token",
             value=access,

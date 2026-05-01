@@ -52,7 +52,7 @@ INSTALLED_APPS = [
 REST_USE_JWT = True
 
 REST_AUTH = {
-    'TOKEN_MODEL': None,  # ✅ disable default token system
+    'TOKEN_MODEL': None,  
 }
 
 SITE_ID = 1
@@ -256,7 +256,7 @@ SIMPLE_JWT = {
     "AUTH_COOKIE": "access_token",
     "AUTH_COOKIE_SECURE": True,
     "AUTH_COOKIE_HTTP_ONLY": True,
-    "AUTH_COOKIE_SAMESITE": "None",   # ← was "Lax"
+    "AUTH_COOKIE_SAMESITE": "None",  
 }
 
 SWAGGER_SETTINGS = {

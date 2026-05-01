@@ -584,7 +584,6 @@ class GitHubLogin(SocialLoginView):
                 }
             })
 
-        # Tokens in cookies only — no query params in redirect URL
         payload = _token_payload(user)
         response = redirect(f"{FRONTEND_URL}/auth/callback")
         _set_token_cookies(request, response, payload)
@@ -643,7 +642,7 @@ class GitHubCLIExchangeView(APIView):
     def post(self, request):
         code = request.data.get("code")
         code_verifier = request.data.get("code_verifier")
-        code_challenge = request.data.get("code_challenge")  # optional extra check
+        code_challenge = request.data.get("code_challenge")  
 
         if not code:
             logger.warning("CLI exchange: missing code in request")
@@ -795,8 +794,6 @@ class GitHubCLIExchangeView(APIView):
             user.role = "analyst"
             user.save()
 
-        # CLI receives tokens in the JSON response body (not cookies).
-        # This is intentional — the CLI stores them in ~/.insighta/credentials.json.
         refresh = RefreshToken.for_user(user)
         refresh["role"] = user.role
         refresh["email"] = user.email
