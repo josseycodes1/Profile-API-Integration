@@ -32,9 +32,13 @@ logger = logging.getLogger(__name__)
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://insighta-web-azure.vercel.app/").rstrip("/")
 CLI_CALLBACK_URL = "http://localhost:9876/callback"
+GITHUB_ALLAUTH_CALLBACK_URL = os.getenv(
+    "GITHUB_CALLBACK_URL",
+    "https://rofile--ntegration-queenjossey2882-3fiaqj4k.leapcell.dev/accounts/github/login/callback/",
+)
 GITHUB_WEB_CALLBACK_URL = os.getenv(
     "GITHUB_WEB_CALLBACK_URL",
-    "NEXT_PUBLIC_API_URL=https://rofile--ntegration-queenjossey2882-3fiaqj4k.leapcell.dev",
+    "https://rofile--ntegration-queenjossey2882-3fiaqj4k.leapcell.dev/auth/github/callback",
 )
 GITHUB_AUTHORIZE_URL = "https://github.com/login/oauth/authorize"
 GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token"
@@ -79,7 +83,7 @@ def _is_web_client(request):
 def _cookie_options(request, max_age):
     host = request.get_host().split(":")[0]
     is_local = host in {"localhost", "127.0.0.1"}
-    cookie_domain = os.getenv("FRONTEND_URL", "").strip() or None
+    cookie_domain = os.getenv("AUTH_COOKIE_DOMAIN", "").strip() or None
 
     if is_local and settings.DEBUG:
         options = {
@@ -171,6 +175,25 @@ def _set_token_cookies(request, response, payload):
         payload["refresh_token"],
         **_cookie_options(request, 5 * 60),
     )
+
+
+def _log_response_cookies(context, response):
+    cookie_debug = []
+    for name, morsel in response.cookies.items():
+        cookie_debug.append(
+            {
+                "name": name,
+                "domain": morsel["domain"] or None,
+                "path": morsel["path"] or None,
+                "secure": bool(morsel["secure"]),
+                "httponly": bool(morsel["httponly"]),
+                "samesite": morsel["samesite"] or None,
+                "max_age": morsel["max-age"] or None,
+                "expires": morsel["expires"] or None,
+            }
+        )
+
+    logger.info("%s cookies=%s", context, cookie_debug)
 
 
 def _clear_token_cookies(request, response):
@@ -317,6 +340,16 @@ class GitHubOAuthCallbackView(APIView):
     throttle_classes = [AuthThrottle]
 
     def get(self, request):
+        logger.info(
+            "GitHubOAuthCallbackView start host=%s origin=%s referer=%s frontend=%s callback=%s has_state=%s has_verifier=%s",
+            request.get_host(),
+            request.headers.get("Origin"),
+            request.headers.get("Referer"),
+            FRONTEND_URL,
+            GITHUB_WEB_CALLBACK_URL,
+            bool(request.COOKIES.get("oauth_state")),
+            bool(request.COOKIES.get("code_verifier")),
+        )
         code = request.query_params.get("code")
         state = request.query_params.get("state")
         saved_state = request.COOKIES.get("oauth_state")
@@ -382,12 +415,24 @@ class GitHubOAuthCallbackView(APIView):
             )
 
         payload = _token_payload(user)
+        logger.info(
+            "GitHubOAuthCallbackView payload created user_id=%s role=%s",
+            user.id,
+            user.role,
+        )
 
         # Tokens are delivered ONLY via httpOnly cookies — never in the redirect
         # URL. This keeps them out of browser history, server logs, and JS.
         response = redirect(f"{FRONTEND_URL}/auth/callback")
+        logger.info(
+            "GitHubOAuthCallbackView redirect prepared status=%s location=%s",
+            response.status_code,
+            response.get("Location"),
+        )
         _set_token_cookies(request, response, payload)
+        _log_response_cookies("GitHubOAuthCallbackView after _set_token_cookies", response)
         _clear_oauth_cookies(request, response)
+        _log_response_cookies("GitHubOAuthCallbackView before return", response)
         return response
 
 
@@ -488,7 +533,7 @@ class CurrentUserView(APIView):
 
 class GitHubLogin(SocialLoginView):
     adapter_class = GitHubOAuth2Adapter
-    callback_url = "https://rofile--ntegration-queenjossey2882-3fiaqj4k.leapcell.dev"
+    callback_url = GITHUB_ALLAUTH_CALLBACK_URL
     client_class = OAuth2Client
 
     @swagger_auto_schema(
@@ -543,6 +588,7 @@ class GitHubLogin(SocialLoginView):
         payload = _token_payload(user)
         response = redirect(f"{FRONTEND_URL}/auth/callback")
         _set_token_cookies(request, response, payload)
+        _log_response_cookies("GitHubLogin before return", response)
         return response
 
 
@@ -564,6 +610,7 @@ class GitHubCallbackRedirectView(View):
         # Tokens in cookies only — no query params in redirect URL
         response = redirect(f"{FRONTEND_URL}/auth/callback")
         _set_token_cookies(request, response, payload)
+        _log_response_cookies("GitHubCallbackRedirectView before return", response)
         return response
 
 
